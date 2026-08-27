@@ -33,12 +33,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: LayoutDashboard,
     },
     {
-      name: "Active Incidents",
-      href: "/incidents/active",
-      icon: Flame,
-      count: activeIncidentsCount,
-    },
-    {
       name: "Safety Approvals",
       href: "/approvals",
       icon: ShieldAlert,
