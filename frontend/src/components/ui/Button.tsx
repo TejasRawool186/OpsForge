@@ -19,13 +19,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const variantStyles = {
-      primary: "bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold shadow-glow border border-cyan-400/30",
-      secondary: "bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700",
-      destructive: "bg-rose-600/90 hover:bg-rose-500 text-white shadow-glow-rose border border-rose-500/40",
-      amber: "bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold shadow-glow-amber border border-amber-400/30",
-      outline: "bg-transparent hover:bg-slate-800/60 text-slate-300 border border-slate-700/80 hover:border-slate-600",
-      ghost: "bg-transparent hover:bg-slate-800/50 text-slate-300 hover:text-white",
-      glow: "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-glow font-semibold border border-cyan-400/40",
+      primary: "bg-zinc-100 hover:bg-white text-zinc-950 font-medium shadow-sm border border-zinc-200 active:bg-zinc-200",
+      secondary: "bg-zinc-800/90 hover:bg-zinc-750 hover:bg-zinc-700 text-zinc-100 border border-zinc-700/80",
+      destructive: "bg-zinc-900 hover:bg-red-950/80 text-red-400 border border-red-900/50 hover:border-red-800",
+      amber: "bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-medium border border-zinc-600 hover:border-zinc-500",
+      outline: "bg-transparent hover:bg-zinc-800/80 text-zinc-300 border border-zinc-800 hover:border-zinc-700",
+      ghost: "bg-transparent hover:bg-zinc-800/70 text-zinc-400 hover:text-zinc-100",
+      glow: "bg-zinc-100 hover:bg-white text-zinc-950 font-medium shadow-sm border border-zinc-200",
     };
 
     return (

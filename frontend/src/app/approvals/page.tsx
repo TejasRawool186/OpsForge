@@ -64,41 +64,41 @@ export default function ApprovalsPage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-amber-950/60 border border-amber-800/50">
-            <ShieldAlert className="h-5 w-5 text-amber-400" />
+          <div className="p-1.5 rounded-lg bg-zinc-900 border border-zinc-800">
+            <ShieldAlert className="h-5 w-5 text-zinc-300" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-100">
             Human Safety Gate & Approvals Queue
           </h1>
         </div>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-zinc-400 mt-1">
           OpsForge strictly halts autonomous execution before applying Level 2 and Level 3 production changes until an SRE reviews and signs off.
         </p>
       </div>
 
       {/* Pending Safety Requests */}
       <div className="space-y-4">
-        <h2 className="text-sm font-mono font-semibold uppercase text-amber-400 flex items-center gap-2 tracking-wider">
-          <AlertTriangle className="h-4 w-4" />
+        <h2 className="text-sm font-mono font-medium uppercase text-zinc-300 flex items-center gap-2 tracking-wider">
+          <AlertTriangle className="h-4 w-4 text-amber-400" />
           Pending Approvals ({pendingList.length})
         </h2>
 
         {pendingList.length === 0 ? (
           <Card>
-            <CardContent className="p-8 text-center text-slate-400 text-xs">
-              <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto mb-2" />
+            <CardContent className="p-8 text-center text-zinc-400 text-xs">
+              <CheckCircle2 className="h-8 w-8 text-zinc-500 mx-auto mb-2" />
               No pending approval requests. All systems operating safely within automatic bounds.
             </CardContent>
           </Card>
         ) : (
           pendingList.map((app) => (
-            <Card key={app.id} className="border-amber-700/50 bg-gradient-to-r from-amber-950/30 to-slate-900 shadow-xl">
-              <CardHeader className="pb-3 border-amber-900/30">
+            <Card key={app.id} className="border-zinc-800 bg-zinc-900/50 shadow-sm">
+              <CardHeader className="pb-3 border-zinc-800/80">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-sm font-bold text-amber-300">{app.id}</span>
+                    <span className="font-mono text-sm font-medium text-zinc-200">{app.id}</span>
                     <RiskBadge risk={app.risk_level} />
-                    <span className="font-mono text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
+                    <span className="font-mono text-xs text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                       Incident: {app.incident_id}
                     </span>
                   </div>
@@ -106,22 +106,22 @@ export default function ApprovalsPage() {
                     Requested: {formatDate(app.requested_at)}
                   </span>
                 </div>
-                <CardTitle className="text-base text-white mt-1">
+                <CardTitle className="text-base text-zinc-100 mt-1">
                   {app.action_type}: {app.action_description}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 pt-3">
-                <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
-                  <Cpu className="h-3.5 w-3.5 text-cyan-400" />
+                <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
+                  <Cpu className="h-3.5 w-3.5 text-zinc-400" />
                   <span>Requested by: {app.requested_by_agent}</span>
                 </div>
 
                 {app.parameters && (
                   <div>
-                    <span className="text-[11px] font-mono text-slate-400 block mb-1">
+                    <span className="text-[11px] font-mono text-zinc-400 block mb-1">
                       Execution Parameters (JSON Payload):
                     </span>
-                    <pre className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-cyan-200/90 overflow-x-auto">
+                    <pre className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-zinc-300 overflow-x-auto">
                       {JSON.stringify(app.parameters, null, 2)}
                     </pre>
                   </div>
@@ -155,27 +155,27 @@ export default function ApprovalsPage() {
 
       {/* Historical Approvals */}
       <div className="space-y-4 pt-4">
-        <h2 className="text-sm font-mono font-semibold uppercase text-slate-400 tracking-wider">
+        <h2 className="text-sm font-mono font-medium uppercase text-zinc-400 tracking-wider">
           Decision History & Audit Trail ({historyList.length})
         </h2>
 
         {historyList.map((app) => (
-          <Card key={app.id} className="border-slate-800/80 bg-slate-900/40">
+          <Card key={app.id} className="border-zinc-800/80 bg-zinc-900/30">
             <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-mono font-bold text-slate-200">{app.id}</span>
+                  <span className="font-mono font-medium text-zinc-200">{app.id}</span>
                   <RiskBadge risk={app.risk_level} />
                   <StatusBadge status={app.status} />
                 </div>
-                <p className="text-slate-300 font-medium">{app.action_description}</p>
+                <p className="text-zinc-300 font-medium">{app.action_description}</p>
                 {app.decision_reason && (
-                  <p className="text-slate-400 text-[11px] mt-1 italic font-mono">
+                  <p className="text-zinc-400 text-[11px] mt-1 italic font-mono">
                     &ldquo;{app.decision_reason}&rdquo; — by {app.decision_by || "SRE"}
                   </p>
                 )}
               </div>
-              <span className="font-mono text-slate-400 text-[11px] whitespace-nowrap">
+              <span className="font-mono text-zinc-500 text-[11px] whitespace-nowrap">
                 {formatDate(app.decision_at || app.requested_at)}
               </span>
             </CardContent>
@@ -195,13 +195,13 @@ export default function ApprovalsPage() {
           description={`Confirm human SRE authorization for ${selectedApproval.id}`}
         >
           <div className="space-y-4">
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs space-y-1">
-              <span className="font-mono text-cyan-400 block font-semibold">{selectedApproval.action_type}</span>
-              <p className="text-slate-300">{selectedApproval.action_description}</p>
+            <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 text-xs space-y-1">
+              <span className="font-mono text-zinc-200 block font-semibold">{selectedApproval.action_type}</span>
+              <p className="text-zinc-300">{selectedApproval.action_description}</p>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-medium text-zinc-300 mb-1">
                 Audit Reason / Decision Justification *
               </label>
               <Textarea

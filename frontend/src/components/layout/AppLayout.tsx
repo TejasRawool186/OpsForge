@@ -15,7 +15,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isCreateIncidentOpen, setIsCreateIncidentOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-[#080c14] text-slate-100 bg-tech-grid flex">
+    <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6] flex">
       {/* Fixed Sidebar */}
       <Sidebar />
 

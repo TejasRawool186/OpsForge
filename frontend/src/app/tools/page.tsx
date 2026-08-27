@@ -34,14 +34,14 @@ export default function ToolsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-cyan-950/60 border border-cyan-800/50">
-              <Wrench className="h-5 w-5 text-cyan-400" />
+            <div className="p-1.5 rounded-lg bg-zinc-900 border border-zinc-800">
+              <Wrench className="h-5 w-5 text-zinc-300" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-100">
               MCP Tool Registry & Sandbox Monitor
             </h1>
           </div>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
             Registered Model Context Protocol (MCP) servers, sandboxed diagnostic runtimes, and health metrics.
           </p>
         </div>
@@ -61,18 +61,18 @@ export default function ToolsPage() {
       {/* Tools Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {tools.map((tool) => (
-          <Card key={tool.id} className="border-slate-800/80 bg-slate-900/60 hover:border-slate-700 transition-all flex flex-col justify-between">
+          <Card key={tool.id} className="border-zinc-800/80 bg-zinc-900/40 hover:border-zinc-700 transition-all flex flex-col justify-between">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-slate-800 text-cyan-400 border border-slate-700">
+                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
                   {tool.tool_type}
                 </span>
-                <span className="flex items-center gap-1.5 text-xs font-mono font-medium text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/50">
+                <span className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                   {tool.status}
                 </span>
               </div>
-              <CardTitle className="text-base text-white mt-2 font-mono">
+              <CardTitle className="text-base text-zinc-100 mt-2 font-mono">
                 {tool.name}
               </CardTitle>
               {tool.description && (
@@ -82,24 +82,24 @@ export default function ToolsPage() {
               )}
             </CardHeader>
 
-            <CardContent className="pt-2 border-t border-slate-800/60 space-y-3">
+            <CardContent className="pt-2 border-t border-zinc-800/60 space-y-3">
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">MCP Server</span>
-                  <span className="text-slate-200 block truncate">{tool.mcp_server}</span>
+                  <span className="text-zinc-500 block text-[10px] uppercase">MCP Server</span>
+                  <span className="text-zinc-200 block truncate">{tool.mcp_server}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Avg Latency</span>
-                  <span className="text-cyan-400 block">{tool.avg_latency_ms}ms</span>
+                  <span className="text-zinc-500 block text-[10px] uppercase">Avg Latency</span>
+                  <span className="text-zinc-200 block">{tool.avg_latency_ms}ms</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between pt-1 text-[11px] font-mono">
-                <span className="text-slate-400">Human Approval:</span>
+                <span className="text-zinc-500">Human Approval:</span>
                 {tool.requires_approval ? (
                   <span className="text-amber-400 font-medium">REQUIRED (L2/L3)</span>
                 ) : (
-                  <span className="text-emerald-400 font-medium">Auto-permitted (L0/L1)</span>
+                  <span className="text-zinc-400 font-medium">Auto-permitted (L0/L1)</span>
                 )}
               </div>
             </CardContent>

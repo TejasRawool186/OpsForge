@@ -22,14 +22,14 @@ export default function SettingsPage() {
     <div className="space-y-6 animate-in fade-in duration-300 max-w-4xl">
       <div>
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-slate-800 border border-slate-700">
-            <Settings className="h-5 w-5 text-slate-300" />
+          <div className="p-1.5 rounded-lg bg-zinc-900 border border-zinc-800">
+            <Settings className="h-5 w-5 text-zinc-300" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-100">
             System & Agent Harness Settings
           </h1>
         </div>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-zinc-400 mt-1">
           Configure TrueForge agent execution parameters, model endpoints, and safety gate policies.
         </p>
       </div>
@@ -39,7 +39,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              <Cpu className="h-4 w-4 text-cyan-400" />
+              <Cpu className="h-4 w-4 text-zinc-400" />
               AI Model Orchestrator & Inference Bridge
             </CardTitle>
             <CardDescription>
@@ -49,7 +49,7 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Model Provider</label>
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">Model Provider</label>
                 <Select value={model} onChange={(e) => setModel(e.target.value)}>
                   <option value="gemini-1.5-pro">Google Gemini 1.5 Pro (Recommended)</option>
                   <option value="gemini-1.5-flash">Google Gemini 1.5 Flash (Ultra-fast)</option>
@@ -59,7 +59,7 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Execution Harness Mode</label>
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">Execution Harness Mode</label>
                 <Select value={harnessMode} onChange={(e) => setHarnessMode(e.target.value)}>
                   <option value="autonomous-gated">Autonomous with Human Safety Gates (Default)</option>
                   <option value="supervised">Supervised (Approve all diagnostic scripts)</option>
@@ -74,7 +74,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              <ShieldCheck className="h-4 w-4 text-amber-400" />
+              <ShieldCheck className="h-4 w-4 text-zinc-400" />
               Safety Gate & Remediation Thresholds
             </CardTitle>
             <CardDescription>
@@ -84,7 +84,7 @@ export default function SettingsPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
                   Approval Request Timeout (Seconds)
                 </label>
                 <Input
@@ -92,17 +92,17 @@ export default function SettingsPage() {
                   value={timeoutSec}
                   onChange={(e) => setTimeoutSec(e.target.value)}
                 />
-                <span className="text-[11px] text-slate-400 font-mono mt-1 block">
+                <span className="text-[11px] text-zinc-500 font-mono mt-1 block">
                   Pending actions auto-expire after this timeout.
                 </span>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
                   Confidence Threshold for Hypothesis
                 </label>
                 <Input defaultValue="85%" disabled />
-                <span className="text-[11px] text-slate-400 font-mono mt-1 block">
+                <span className="text-[11px] text-zinc-500 font-mono mt-1 block">
                   Requires ≥85% confidence before proposing remediation.
                 </span>
               </div>
@@ -117,7 +117,7 @@ export default function SettingsPage() {
               Settings saved successfully!
             </span>
           )}
-          <Button type="submit" variant="glow" size="sm" className="font-mono text-xs">
+          <Button type="submit" variant="primary" size="sm" className="font-mono text-xs">
             Save Configuration
           </Button>
         </div>

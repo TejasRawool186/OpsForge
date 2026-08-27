@@ -31,47 +31,47 @@ export default function ReportsPage() {
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-emerald-950/60 border border-emerald-800/50">
-            <FileText className="h-5 w-5 text-emerald-400" />
+          <div className="p-1.5 rounded-lg bg-zinc-900 border border-zinc-800">
+            <FileText className="h-5 w-5 text-zinc-300" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-100">
             Incident Post-Mortems & Reports Archive
           </h1>
         </div>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-zinc-400 mt-1">
           Auto-generated SRE root-cause analysis, timeline logs, and permanent preventive actions.
         </p>
       </div>
 
       <div className="space-y-4">
         {reports.map((report) => (
-          <Card key={report.id} className="border-slate-800/80 bg-slate-900/60 hover:border-slate-700 transition-all">
-            <CardHeader className="pb-3">
+          <Card key={report.id} className="border-zinc-800/80 bg-zinc-900/40 hover:border-zinc-750 transition-all shadow-sm">
+            <CardHeader className="pb-3 border-zinc-800/60">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/50">
+                  <span className="font-mono text-xs font-medium text-zinc-200 px-2.5 py-0.5 rounded bg-zinc-800 border border-zinc-700">
                     {report.id}
                   </span>
-                  <span className="font-mono text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
+                  <span className="font-mono text-xs text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
                     {report.incidentId}
                   </span>
                 </div>
-                <span className="text-xs font-mono text-slate-400">{report.date}</span>
+                <span className="text-xs font-mono text-zinc-400">{report.date}</span>
               </div>
-              <CardTitle className="text-base text-white mt-1.5">
+              <CardTitle className="text-base text-zinc-100 mt-1.5">
                 {report.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 pt-1">
-              <div className="text-xs text-slate-300">
-                <span className="text-slate-400 font-mono">Impact: </span>
+              <div className="text-xs text-zinc-300">
+                <span className="text-zinc-400 font-mono">Impact: </span>
                 {report.impact}
               </div>
-              <div className="text-xs text-slate-300">
-                <span className="text-slate-400 font-mono">Root Cause: </span>
+              <div className="text-xs text-zinc-300">
+                <span className="text-zinc-400 font-mono">Root Cause: </span>
                 {report.rootCause}
               </div>
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800/60">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-zinc-800/60">
                 <Button variant="outline" size="sm" className="font-mono text-xs gap-1.5">
                   <Download className="h-3.5 w-3.5" />
                   Export PDF

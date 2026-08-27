@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Plus, Radio, Server } from "lucide-react";
+import { Search, Sun, Bell, Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 interface NavbarProps {
@@ -14,47 +14,54 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenCreateIncident,
 }) => {
   return (
-    <header className="h-16 border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl px-6 flex items-center justify-between sticky top-0 z-30 ml-64">
-      {/* Left: Search / Command Bar Trigger */}
-      <div className="flex items-center gap-4 w-96">
+    <header className="h-16 bg-[#0d0d10] px-8 flex items-center justify-between sticky top-0 z-30 ml-64">
+      {/* Left: Search Bar */}
+      <div className="w-80">
         <button
           onClick={onOpenCommandPalette}
-          className="flex items-center justify-between w-full h-9 px-3 rounded-lg border border-slate-800 bg-slate-900/60 hover:bg-slate-900 text-xs text-slate-400 hover:text-slate-200 transition-all group"
+          className="flex items-center justify-between w-full h-10 px-4 rounded-xl border border-[#23232a] bg-[#141417] hover:border-[#32323d] text-xs text-[#8e8e99] hover:text-white transition-all text-left group"
         >
-          <div className="flex items-center gap-2">
-            <Search className="h-3.5 w-3.5 text-slate-500 group-hover:text-cyan-400" />
-            <span>Search incidents, logs, MCP tools...</span>
-          </div>
-          <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-400 font-semibold">
+          <span>Search issues, projects...</span>
+          <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded bg-[#1f1f26] border border-[#2e2e38] text-[10px] font-mono text-[#71717a]">
             ⌘K
           </kbd>
         </button>
       </div>
 
-      {/* Right: Environment, Agent Status & Action Button */}
-      <div className="flex items-center gap-4">
-        {/* Environment Badge */}
-        <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300">
-          <Server className="h-3.5 w-3.5 text-cyan-400" />
-          <span>production-us-east-1</span>
-        </div>
-
-        {/* Live Agent Pulse */}
-        <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-indigo-950/40 border border-indigo-800/40 text-xs text-indigo-300">
-          <Radio className="h-3.5 w-3.5 text-indigo-400 animate-pulse" />
-          <span className="font-mono text-[11px]">3 Agents Active</span>
-        </div>
-
-        {/* Trigger / Simulate Incident Button */}
+      {/* Right: Actions, Theme, Notifications & Admin Pill */}
+      <div className="flex items-center gap-3">
+        {/* Simulate Incident Button */}
         <Button
-          variant="glow"
+          variant="outline"
           size="sm"
           onClick={onOpenCreateIncident}
-          className="gap-1.5 font-mono text-xs"
+          className="rounded-xl border-[#23232a] bg-[#141417] hover:bg-[#1a1a20] text-xs font-medium gap-1.5 text-[#d1d5db]"
         >
           <Plus className="h-3.5 w-3.5" />
           Simulate Incident
         </Button>
+
+        {/* Theme Toggle Icon Button */}
+        <button
+          className="p-2 rounded-xl text-[#8e8e99] hover:text-white hover:bg-white/[0.04] transition-colors"
+          title="Toggle Theme"
+        >
+          <Sun className="h-4.5 w-4.5" />
+        </button>
+
+        {/* Notification Bell */}
+        <button
+          className="p-2 rounded-xl text-[#8e8e99] hover:text-white hover:bg-white/[0.04] transition-colors relative"
+          title="Notifications"
+        >
+          <Bell className="h-4.5 w-4.5" />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500" />
+        </button>
+
+        {/* ADMIN Capsule Badge */}
+        <div className="px-3.5 py-1.5 rounded-full bg-white text-[#0d0d10] text-[11px] font-bold tracking-wider uppercase shadow-sm">
+          ADMIN
+        </div>
       </div>
     </header>
   );

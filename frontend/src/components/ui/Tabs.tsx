@@ -12,7 +12,7 @@ interface TabsProps {
 
 export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className }) => {
   return (
-    <div className={cn("flex space-x-1 border-b border-slate-800/80 p-1 bg-slate-950/40 rounded-xl", className)}>
+    <div className={cn("flex space-x-1 border border-[#23232a] p-1.5 bg-[#141417] rounded-2xl", className)}>
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
@@ -20,19 +20,19 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-lg transition-all duration-150 relative",
+              "flex items-center gap-2 px-4 py-2.5 text-xs font-medium rounded-xl transition-all duration-150 relative",
               isActive
-                ? "bg-slate-800 text-cyan-400 font-semibold shadow-inner-glow border border-slate-700/80"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-850"
+                ? "bg-[#22172f] text-white font-semibold border border-purple-500/30 shadow-sm"
+                : "text-[#8e8e99] hover:text-white hover:bg-white/[0.03]"
             )}
           >
-            {tab.icon && <span className={cn(isActive ? "text-cyan-400" : "text-slate-500")}>{tab.icon}</span>}
+            {tab.icon && <span className={cn(isActive ? "text-purple-300" : "text-[#8e8e99]")}>{tab.icon}</span>}
             <span>{tab.label}</span>
             {tab.count !== undefined && (
               <span
                 className={cn(
-                  "px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold",
-                  isActive ? "bg-cyan-500/20 text-cyan-300" : "bg-slate-800 text-slate-400"
+                  "px-2 py-0.5 rounded-full text-[10px] font-bold",
+                  isActive ? "bg-purple-500/30 text-purple-200" : "bg-[#1f1f26] text-[#8e8e99]"
                 )}
               >
                 {tab.count}

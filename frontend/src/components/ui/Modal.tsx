@@ -57,19 +57,19 @@ export const Modal: React.FC<ModalProps> = ({
       {/* Modal Dialog Content */}
       <div
         className={cn(
-          "relative w-full bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200",
+          "relative w-full bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200",
           maxWidthStyles[maxWidth]
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-950/40">
+        <div className="flex items-center justify-between p-5 border-b border-zinc-800 bg-zinc-950/40">
           <div>
-            <h2 className="text-lg font-semibold text-white tracking-tight">{title}</h2>
-            {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
+            <h2 className="text-lg font-semibold text-zinc-100 tracking-tight">{title}</h2>
+            {description && <p className="text-xs text-zinc-400 mt-0.5">{description}</p>}
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-zinc-400 hover:text-zinc-100 p-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
           >
             <X className="h-5 w-5" />
           </button>

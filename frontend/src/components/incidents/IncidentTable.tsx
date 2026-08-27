@@ -40,15 +40,16 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="w-full sm:w-80">
           <Input
-            placeholder="Filter incidents by ID, service, or issue..."
+            placeholder="Search issues, projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            icon={<Search className="h-4 w-4" />}
+            icon={<Search className="h-4 w-4 text-[#8e8e99]" />}
+            className="rounded-xl bg-[#141417] border-[#23232a] text-xs h-10"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="flex items-center gap-1.5 text-xs text-[#8e8e99]">
             <Filter className="h-3.5 w-3.5" />
             <span>Filters:</span>
           </div>
@@ -56,7 +57,7 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
           <Select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-36 text-xs h-9"
+            className="w-36 text-xs h-10 rounded-xl bg-[#141417] border-[#23232a]"
           >
             <option value="ALL">All Statuses</option>
             <option value="ACTIVE">Active Only</option>
@@ -67,9 +68,9 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
           <Select
             value={severityFilter}
             onChange={(e) => setSeverityFilter(e.target.value)}
-            className="w-32 text-xs h-9"
+            className="w-32 text-xs h-10 rounded-xl bg-[#141417] border-[#23232a]"
           >
-            <option value="ALL">All Severities</option>
+            <option value="ALL">All Priorities</option>
             <option value="CRITICAL">Critical (P1)</option>
             <option value="HIGH">High (P2)</option>
             <option value="MEDIUM">Medium (P3)</option>
@@ -79,34 +80,34 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
       </div>
 
       {/* Incidents Table */}
-      <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 overflow-hidden shadow-xl">
+      <div className="rounded-2xl border border-[#23232a] bg-[#141417] overflow-hidden shadow-card">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-32">Incident ID</TableHead>
-              <TableHead>Title & Root Cause</TableHead>
-              <TableHead className="w-28">Severity</TableHead>
-              <TableHead className="w-40">Status</TableHead>
-              <TableHead className="w-36">Service</TableHead>
-              <TableHead className="w-44">Assigned Agent</TableHead>
-              <TableHead className="w-36">Detected</TableHead>
-              <TableHead className="w-20 text-right">Action</TableHead>
+            <TableRow className="border-b border-[#23232a] bg-[#141417]">
+              <TableHead className="w-32 text-[#8e8e99] font-medium text-xs">ID</TableHead>
+              <TableHead className="text-[#8e8e99] font-medium text-xs">Title & Summary</TableHead>
+              <TableHead className="w-28 text-[#8e8e99] font-medium text-xs">Priority</TableHead>
+              <TableHead className="w-40 text-[#8e8e99] font-medium text-xs">Status</TableHead>
+              <TableHead className="w-36 text-[#8e8e99] font-medium text-xs">Project / Service</TableHead>
+              <TableHead className="w-44 text-[#8e8e99] font-medium text-xs">Assignee / Agent</TableHead>
+              <TableHead className="w-36 text-[#8e8e99] font-medium text-xs">Created</TableHead>
+              <TableHead className="w-20 text-right text-[#8e8e99] font-medium text-xs">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredIncidents.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-10 text-slate-500">
-                  No incidents matching your filter criteria.
+                <TableCell colSpan={8} className="text-center py-10 text-[#71717a]">
+                  No issues or incidents found matching your filter criteria.
                 </TableCell>
               </TableRow>
             ) : (
               filteredIncidents.map((incident) => (
-                <TableRow key={incident.id} className="group">
-                  <TableCell className="font-mono text-xs font-semibold text-cyan-400">
+                <TableRow key={incident.id} className="group border-b border-[#1f1f26] hover:bg-white/[0.02]">
+                  <TableCell className="font-mono text-xs font-semibold text-white">
                     <Link
                       href={`/incidents/${incident.id}`}
-                      className="hover:underline flex items-center gap-1"
+                      className="hover:underline hover:text-purple-300 flex items-center gap-1"
                     >
                       {incident.id}
                     </Link>
@@ -115,12 +116,12 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
                     <div className="flex flex-col max-w-md">
                       <Link
                         href={`/incidents/${incident.id}`}
-                        className="font-medium text-slate-200 hover:text-cyan-300 transition-colors line-clamp-1 text-xs sm:text-sm"
+                        className="font-medium text-white hover:text-purple-300 transition-colors line-clamp-1 text-xs sm:text-sm"
                       >
                         {incident.title}
                       </Link>
                       {incident.error_message && (
-                        <span className="text-[11px] text-slate-400 font-mono line-clamp-1 mt-0.5">
+                        <span className="text-[11px] text-[#71717a] font-mono line-clamp-1 mt-0.5">
                           {incident.error_message}
                         </span>
                       )}
@@ -133,24 +134,26 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
                     <StatusBadge status={incident.status} />
                   </TableCell>
                   <TableCell>
-                    <span className="font-mono text-xs text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
+                    <span className="text-xs text-[#d1d5db] bg-[#1e1e24] px-2.5 py-1 rounded-lg border border-[#2e2e38]">
                       {incident.service}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1.5 text-xs text-slate-300">
-                      <Cpu className="h-3.5 w-3.5 text-cyan-400 flex-shrink-0" />
+                    <div className="flex items-center gap-2 text-xs text-[#d1d5db]">
+                      <div className="h-5 w-5 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-[10px]">
+                        {(incident.assigned_subagent || "A").charAt(0).toUpperCase()}
+                      </div>
                       <span className="truncate">{incident.assigned_subagent || "Supervisor"}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="font-mono text-[11px] text-slate-400">
+                  <TableCell className="text-[11px] text-[#71717a] font-mono">
                     {formatDate(incident.created_at)}
                   </TableCell>
                   <TableCell className="text-right">
                     <Link
                       href={`/incidents/${incident.id}`}
-                      className="inline-flex items-center justify-center p-1.5 rounded-lg bg-slate-800/80 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 transition-colors"
-                      title="Open Incident Workspace"
+                      className="inline-flex items-center justify-center p-1.5 rounded-lg bg-[#1f1f26] hover:bg-white hover:text-black text-[#8e8e99] transition-colors"
+                      title="Open Issue Workspace"
                     >
                       <ArrowUpRight className="h-4 w-4" />
                     </Link>
