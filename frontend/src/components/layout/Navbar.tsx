@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Search, Bell, Plus } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { NotificationsDropdown } from "./NotificationsDropdown";
 
 interface NavbarProps {
   onOpenCommandPalette: () => void;
@@ -41,14 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           Simulate Incident
         </Button>
 
-        {/* Notification Bell */}
-        <button
-          className="p-2 rounded-xl text-[#8e8e99] hover:text-white hover:bg-white/[0.04] transition-colors relative"
-          title="Notifications"
-        >
-          <Bell className="h-4.5 w-4.5" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500" />
-        </button>
+        {/* Interactive Notifications Dropdown */}
+        <NotificationsDropdown />
 
         {/* ADMIN Capsule Badge */}
         <div className="px-3.5 py-1.5 rounded-full bg-white text-[#0d0d10] text-[11px] font-bold tracking-wider uppercase shadow-sm">
