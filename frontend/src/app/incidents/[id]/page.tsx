@@ -56,8 +56,8 @@ export default function IncidentWorkspacePage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
-          <p className="text-xs font-mono text-slate-400">Loading Incident Workspace...</p>
+          <div className="h-8 w-8 rounded-full border-2 border-zinc-400 border-t-transparent animate-spin" />
+          <p className="text-xs font-mono text-zinc-400">Loading Incident Workspace...</p>
         </div>
       </div>
     );
@@ -66,9 +66,9 @@ export default function IncidentWorkspacePage() {
   if (!incident) {
     return (
       <div className="text-center py-20">
-        <AlertCircle className="h-12 w-12 text-rose-500 mx-auto mb-3" />
-        <h2 className="text-lg font-bold text-white">Incident Not Found</h2>
-        <p className="text-xs text-slate-400 mt-1">
+        <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-3" />
+        <h2 className="text-lg font-bold text-zinc-100">Incident Not Found</h2>
+        <p className="text-xs text-zinc-400 mt-1">
           No incident matching ID {incidentId} was located.
         </p>
         <Button
@@ -97,39 +97,39 @@ export default function IncidentWorkspacePage() {
       <div className="flex items-center justify-between">
         <button
           onClick={() => router.push("/incidents")}
-          className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400 transition-colors font-mono"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          Back to Command Center
+          Back to Dashboard
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400 font-mono">Status:</span>
+          <span className="text-xs text-muted-foreground">Status:</span>
           <StatusBadge status={incident.status} />
         </div>
       </div>
 
       {/* Incident Header Workspace Card */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/80 backdrop-blur-md p-6 shadow-xl space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-card space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2.5 mb-2">
-              <span className="font-mono text-sm font-bold text-cyan-400 px-2.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-800/50">
+              <span className="font-mono text-xs font-bold text-foreground px-2.5 py-1 rounded-lg bg-muted border border-border">
                 {incident.id}
               </span>
               <SeverityBadge severity={incident.severity} />
-              <span className="text-xs font-mono text-slate-300 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
+              <span className="text-xs text-foreground bg-muted px-2.5 py-1 rounded-lg border border-border">
                 {incident.service}
               </span>
-              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+              <span className="text-xs text-muted-foreground bg-background px-2.5 py-1 rounded-lg border border-border">
                 {incident.environment}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
               {incident.title}
             </h1>
             {incident.description && (
-              <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-4xl">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-4xl">
                 {incident.description}
               </p>
             )}
@@ -141,7 +141,7 @@ export default function IncidentWorkspacePage() {
                 variant="amber"
                 size="sm"
                 onClick={() => router.push("/approvals")}
-                className="font-mono text-xs gap-1.5"
+                className="text-xs gap-1.5 rounded-xl"
               >
                 <ShieldCheck className="h-4 w-4" />
                 Review Safety Gate
@@ -151,28 +151,28 @@ export default function IncidentWorkspacePage() {
         </div>
 
         {/* Telemetry bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-slate-800/80 text-xs font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-border text-xs">
           <div>
-            <span className="text-slate-400 block text-[10px] uppercase">Assigned Agent</span>
-            <div className="flex items-center gap-1.5 text-slate-200 mt-0.5 font-medium">
-              <Cpu className="h-3.5 w-3.5 text-cyan-400" />
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Assigned Agent</span>
+            <div className="flex items-center gap-1.5 text-foreground mt-0.5 font-medium">
+              <Cpu className="h-3.5 w-3.5 text-muted-foreground" />
               <span>{incident.assigned_subagent || "TrueForge Supervisor"}</span>
             </div>
           </div>
 
           <div>
-            <span className="text-slate-400 block text-[10px] uppercase">Alert Source</span>
-            <span className="text-slate-200 block mt-0.5 font-medium">{incident.source}</span>
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Alert Source</span>
+            <span className="text-foreground block mt-0.5 font-medium">{incident.source}</span>
           </div>
 
           <div>
-            <span className="text-slate-400 block text-[10px] uppercase">Detected At</span>
-            <span className="text-slate-200 block mt-0.5 font-medium">{formatDate(incident.created_at)}</span>
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Detected At</span>
+            <span className="text-foreground block mt-0.5 font-medium">{formatDate(incident.created_at)}</span>
           </div>
 
           <div>
-            <span className="text-slate-400 block text-[10px] uppercase">Confidence</span>
-            <span className="text-emerald-400 block mt-0.5 font-bold">94% Confidence</span>
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Confidence</span>
+            <span className="text-emerald-600 dark:text-emerald-400 block mt-0.5 font-medium">94% Confidence</span>
           </div>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function IncidentWorkspacePage() {
           <Card>
             <CardHeader>
               <CardTitle>
-                <Clock className="h-4 w-4 text-cyan-400" />
+                <Clock className="h-4 w-4 text-zinc-400" />
                 Real-Time Investigation Timeline & Telemetry Trace
               </CardTitle>
               <CardDescription>
@@ -195,35 +195,35 @@ export default function IncidentWorkspacePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="relative border-l-2 border-slate-800 ml-4 pl-6 space-y-6">
+              <div className="relative border-l-2 border-zinc-800 ml-4 pl-6 space-y-6">
                 {timeline.map((event) => (
                   <div key={event.id} className="relative group">
                     {/* Dot */}
-                    <div className="absolute -left-[31px] top-1.5 h-3.5 w-3.5 rounded-full bg-slate-900 border-2 border-cyan-400 group-hover:bg-cyan-400 transition-colors" />
+                    <div className="absolute -left-[31px] top-1.5 h-3.5 w-3.5 rounded-full bg-zinc-900 border-2 border-zinc-500 group-hover:bg-zinc-300 transition-colors" />
 
-                    <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 shadow-sm space-y-1.5">
+                    <div className="p-4 rounded-xl bg-zinc-950/60 border border-zinc-800/80 shadow-sm space-y-1.5">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-slate-800 text-cyan-300 border border-slate-700">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium uppercase bg-zinc-800 text-zinc-200 border border-zinc-700">
                             {event.event_type}
                           </span>
                           {event.tool && (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-950 text-indigo-300 border border-indigo-800/50">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-zinc-300 border border-zinc-700">
                               {event.tool}
                             </span>
                           )}
                         </div>
-                        <span className="text-[11px] font-mono text-slate-400">
+                        <span className="text-[11px] font-mono text-zinc-400">
                           {formatDate(event.timestamp)}
                         </span>
                       </div>
 
-                      <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed">
+                      <p className="text-xs sm:text-sm text-zinc-200 font-normal leading-relaxed">
                         {event.summary}
                       </p>
 
                       {event.details && (
-                        <pre className="p-2.5 rounded bg-slate-900/90 border border-slate-800 text-[11px] font-mono text-cyan-200/90 overflow-x-auto">
+                        <pre className="p-2.5 rounded bg-zinc-900/90 border border-zinc-800 text-[11px] font-mono text-zinc-300 overflow-x-auto">
                           {JSON.stringify(event.details, null, 2)}
                         </pre>
                       )}
@@ -241,7 +241,7 @@ export default function IncidentWorkspacePage() {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <Brain className="h-4 w-4 text-indigo-400" />
+                  <Brain className="h-4 w-4 text-zinc-400" />
                   Root Cause Hypothesis & Analysis
                 </CardTitle>
                 <CardDescription>
@@ -249,26 +249,26 @@ export default function IncidentWorkspacePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 rounded-lg bg-indigo-950/30 border border-indigo-800/40 space-y-2">
+                <div className="p-4 rounded-lg bg-zinc-900/70 border border-zinc-800 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase text-indigo-300">
+                    <span className="text-xs font-mono font-medium uppercase text-zinc-300">
                       Hypothesis #1 (Primary)
                     </span>
-                    <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                    <span className="text-xs font-mono font-medium text-emerald-400 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                       94% Confidence
                     </span>
                   </div>
-                  <p className="text-xs text-slate-200 leading-relaxed">
+                  <p className="text-xs text-zinc-200 leading-relaxed">
                     Deployment <strong>checkout-v2.14.0</strong> introduced unreleased database connection handles in order processing loop, exhausting QueuePool (max 20 + 10 overflow) within 15 minutes under standard peak traffic.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
-                  <span className="text-xs font-mono text-slate-400 uppercase">Recommended Remediation Action</span>
-                  <p className="text-xs text-white font-medium">
+                <div className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 space-y-2">
+                  <span className="text-xs font-mono text-zinc-400 uppercase">Recommended Remediation Action</span>
+                  <p className="text-xs text-zinc-200 font-medium">
                     Execute Kubernetes deployment rollback to previous stable image tag <code>checkout-v2.13.9</code>.
                   </p>
-                  <span className="inline-block text-[11px] font-mono text-rose-300 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800">
+                  <span className="inline-block text-[11px] font-mono text-amber-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
                     Risk Level 3 (Rollback) — Requires SRE Approval
                   </span>
                 </div>
@@ -278,7 +278,7 @@ export default function IncidentWorkspacePage() {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <Terminal className="h-4 w-4 text-cyan-400" />
+                  <Terminal className="h-4 w-4 text-zinc-400" />
                   Correlated Telemetry Evidence
                 </CardTitle>
                 <CardDescription>
@@ -286,7 +286,7 @@ export default function IncidentWorkspacePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <pre className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto leading-relaxed">
+                <pre className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-zinc-300 overflow-x-auto leading-relaxed">
 {`{
   "github": {
     "release": "checkout-v2.14.0",
@@ -317,7 +317,7 @@ export default function IncidentWorkspacePage() {
           <Card>
             <CardHeader>
               <CardTitle>
-                <Wrench className="h-4 w-4 text-cyan-400" />
+                <Wrench className="h-4 w-4 text-zinc-400" />
                 Executed MCP Tools & Diagnostic Scripts
               </CardTitle>
               <CardDescription>
@@ -326,32 +326,32 @@ export default function IncidentWorkspacePage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+                <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-between text-xs">
                   <div>
-                    <span className="font-mono font-bold text-cyan-300">github_deployment_inspector</span>
-                    <p className="text-slate-400 text-[11px] mt-0.5">Fetched deployments from GitHub MCP server</p>
+                    <span className="font-mono font-medium text-zinc-200">github_deployment_inspector</span>
+                    <p className="text-zinc-400 text-[11px] mt-0.5">Fetched deployments from GitHub MCP server</p>
                   </div>
-                  <span className="font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                  <span className="font-mono text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                     200 OK (184ms)
                   </span>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+                <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-between text-xs">
                   <div>
-                    <span className="font-mono font-bold text-cyan-300">grafana_metrics_query</span>
-                    <p className="text-slate-400 text-[11px] mt-0.5">Queried 5xx error rate and connection metrics</p>
+                    <span className="font-mono font-medium text-zinc-200">grafana_metrics_query</span>
+                    <p className="text-zinc-400 text-[11px] mt-0.5">Queried 5xx error rate and connection metrics</p>
                   </div>
-                  <span className="font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                  <span className="font-mono text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                     200 OK (92ms)
                   </span>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+                <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-between text-xs">
                   <div>
-                    <span className="font-mono font-bold text-cyan-300">postgres_query_diagnostic</span>
-                    <p className="text-slate-400 text-[11px] mt-0.5">Queried pg_stat_activity for unreleased connection locks</p>
+                    <span className="font-mono font-medium text-zinc-200">postgres_query_diagnostic</span>
+                    <p className="text-zinc-400 text-[11px] mt-0.5">Queried pg_stat_activity for unreleased connection locks</p>
                   </div>
-                  <span className="font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                  <span className="font-mono text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                     200 OK (45ms)
                   </span>
                 </div>
@@ -365,7 +365,7 @@ export default function IncidentWorkspacePage() {
           <Card>
             <CardHeader>
               <CardTitle>
-                <ShieldCheck className="h-4 w-4 text-amber-400" />
+                <ShieldCheck className="h-4 w-4 text-zinc-400" />
                 Human Safety Gate Approvals
               </CardTitle>
               <CardDescription>
@@ -373,16 +373,16 @@ export default function IncidentWorkspacePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="p-4 rounded-xl bg-amber-950/30 border border-amber-800/40 space-y-3">
+              <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-amber-300">
+                  <span className="text-xs font-mono font-medium text-amber-400">
                     APPR-8801-01 • Level 3 Rollback Request
                   </span>
-                  <span className="text-xs font-mono font-bold text-amber-400 bg-amber-950 px-2 py-0.5 rounded border border-amber-800">
+                  <span className="text-xs font-mono font-medium text-amber-400 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                     PENDING APPROVAL
                   </span>
                 </div>
-                <p className="text-xs text-slate-200">
+                <p className="text-xs text-zinc-200">
                   Rollback deployment <code>checkout-service</code> to image tag <code>v2.13.9</code> in production cluster.
                 </p>
                 <div className="pt-2">
@@ -405,7 +405,7 @@ export default function IncidentWorkspacePage() {
           <Card>
             <CardHeader>
               <CardTitle>
-                <FileText className="h-4 w-4 text-emerald-400" />
+                <FileText className="h-4 w-4 text-zinc-400" />
                 Auto-Generated Post-Mortem Draft
               </CardTitle>
               <CardDescription>
@@ -413,7 +413,7 @@ export default function IncidentWorkspacePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="prose prose-invert max-w-none text-xs text-slate-300 space-y-3">
+              <div className="prose prose-invert max-w-none text-xs text-zinc-300 space-y-3">
                 <p>
                   <strong>Executive Summary:</strong> At 18 minutes past the hour, an alert fired indicating elevated 500 error rates on the checkout service. TrueForge automated investigation identified a connection pool leak introduced in release v2.14.0.
                 </p>

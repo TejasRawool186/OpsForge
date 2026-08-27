@@ -97,8 +97,8 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Scenario Quick Presets */}
         <div>
-          <label className="text-xs font-mono font-medium text-cyan-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-            <Zap className="h-3.5 w-3.5" />
+          <label className="text-xs font-mono font-medium text-zinc-300 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+            <Zap className="h-3.5 w-3.5 text-zinc-400" />
             Quick Demo Scenario Presets
           </label>
           <div className="grid grid-cols-1 gap-2">
@@ -107,12 +107,12 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
                 type="button"
                 key={preset.label}
                 onClick={() => applyPreset(preset)}
-                className="text-left p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-900 transition-all text-xs text-slate-300 flex items-center justify-between group"
+                className="text-left p-2.5 rounded-lg bg-zinc-950/80 border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900 transition-all text-xs text-zinc-300 flex items-center justify-between group"
               >
-                <div className="font-medium text-slate-200 group-hover:text-cyan-300">
+                <div className="font-medium text-zinc-200 group-hover:text-white">
                   {preset.label}
                 </div>
-                <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
+                <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
                   Load Preset
                 </span>
               </button>
@@ -120,9 +120,9 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
           </div>
         </div>
 
-        <div className="border-t border-slate-800 pt-4 space-y-4">
+        <div className="border-t border-zinc-800 pt-4 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Incident Title *</label>
+            <label className="block text-xs font-medium text-zinc-300 mb-1.5">Incident Title *</label>
             <Input
               required
               placeholder="e.g. Checkout Service Error Rate Spike > 18.4%"
@@ -133,7 +133,7 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">Target Service</label>
+              <label className="block text-xs font-medium text-zinc-300 mb-1.5">Target Service</label>
               <Input
                 placeholder="checkout-service"
                 value={service}
@@ -141,7 +141,7 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">Severity</label>
+              <label className="block text-xs font-medium text-zinc-300 mb-1.5">Severity</label>
               <Select value={severity} onChange={(e) => setSeverity(e.target.value as Severity)}>
                 <option value="CRITICAL">CRITICAL (P1)</option>
                 <option value="HIGH">HIGH (P2)</option>
@@ -150,7 +150,7 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
               </Select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">Environment</label>
+              <label className="block text-xs font-medium text-zinc-300 mb-1.5">Environment</label>
               <Select value={environment} onChange={(e) => setEnvironment(e.target.value)}>
                 <option value="production-us-east-1">production-us-east-1</option>
                 <option value="production-eu-west-1">production-eu-west-1</option>
@@ -160,7 +160,7 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Error Message / Stacktrace Signature</label>
+            <label className="block text-xs font-medium text-zinc-300 mb-1.5">Error Message / Stacktrace Signature</label>
             <Input
               placeholder="e.g. sqlalchemy.exc.TimeoutError: QueuePool limit of size 20 overflow 10 reached"
               value={errorMessage}
@@ -169,7 +169,7 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Alert Description & Context</label>
+            <label className="block text-xs font-medium text-zinc-300 mb-1.5">Alert Description & Context</label>
             <Textarea
               placeholder="Describe the initial telemetry trigger or symptoms..."
               value={description}
@@ -180,11 +180,11 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
         </div>
 
         {/* Footer actions */}
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-800">
           <Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button type="submit" variant="glow" isLoading={isSubmitting} className="font-mono text-xs">
+          <Button type="submit" variant="primary" isLoading={isSubmitting} className="font-mono text-xs">
             <AlertTriangle className="h-3.5 w-3.5" />
             Launch Agent Investigation
           </Button>

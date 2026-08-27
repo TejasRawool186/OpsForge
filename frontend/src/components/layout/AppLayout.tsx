@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
 import { CommandPalette } from "./CommandPalette";
@@ -11,11 +12,46 @@ interface AppLayoutProps {
 }
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+  const pathname = usePathname();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = React.useState(false);
   const [isCreateIncidentOpen, setIsCreateIncidentOpen] = React.useState(false);
 
+  const isLandingPage = pathname === "/";
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Check if page was refreshed
+      const navEntries = performance.getEntriesByType("navigation");
+      if (navEntries.length > 0) {
+        const nav = navEntries[0] as PerformanceNavigationTiming;
+        if (nav.type === "reload" && pathname !== "/") {
+          window.location.replace("/");
+          return;
+        }
+      }
+
+      // Check if session has entered
+      const hasEntered = sessionStorage.getItem("opsforge_session");
+      if (!hasEntered && pathname !== "/") {
+        window.location.replace("/");
+      }
+    }
+  }, [pathname]);
+
+  if (isLandingPage) {
+    return (
+      <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6]">
+        {children}
+        <CreateIncidentModal
+          isOpen={isCreateIncidentOpen}
+          onClose={() => setIsCreateIncidentOpen(false)}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#080c14] text-slate-100 bg-tech-grid flex">
+    <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6] flex">
       {/* Fixed Sidebar */}
       <Sidebar />
 

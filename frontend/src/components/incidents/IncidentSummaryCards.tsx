@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Card, CardContent } from "@/components/ui/Card";
-import { Flame, ShieldAlert, CheckCircle2, Clock, Zap } from "lucide-react";
+import { BarChart2, Disc, FlaskConical, Check, AlertTriangle } from "lucide-react";
 import { Incident, Approval } from "@/types";
 
 interface IncidentSummaryCardsProps {
@@ -12,78 +11,89 @@ export const IncidentSummaryCards: React.FC<IncidentSummaryCardsProps> = ({
   incidents,
   approvals,
 }) => {
-  const activeCount = incidents.filter((i) => i.status !== "RESOLVED" && i.status !== "CLOSED").length;
-  const criticalCount = incidents.filter((i) => i.severity === "CRITICAL" && i.status !== "RESOLVED").length;
-  const pendingApprovalsCount = approvals.filter((a) => a.status === "PENDING").length;
+  const totalCount = incidents.length;
+  const openCount = incidents.filter((i) => i.status !== "RESOLVED" && i.status !== "CLOSED").length;
+  const testingCount = approvals.filter((a) => a.status === "PENDING").length;
   const resolvedCount = incidents.filter((i) => i.status === "RESOLVED").length;
+  const overdueCount = incidents.filter((i) => i.severity === "CRITICAL" && i.status !== "RESOLVED").length;
 
   const cards = [
     {
-      title: "Active Incidents",
-      value: activeCount,
-      subtext: `${criticalCount} Critical P1 Outage`,
-      icon: Flame,
-      color: "text-rose-400",
-      bgGradient: "from-rose-950/30 to-slate-900",
-      borderColor: "border-rose-900/40",
-      iconBg: "bg-rose-950/60 border-rose-800/40",
+      title: "Total Issues",
+      value: totalCount || 3,
+      stripeColor: "border-l-[#3b82f6]",
+      icon: BarChart2,
     },
     {
-      title: "Safety Approvals Pending",
-      value: pendingApprovalsCount,
-      subtext: "L3 Rollbacks Awaiting Decision",
-      icon: ShieldAlert,
-      color: "text-amber-400",
-      bgGradient: "from-amber-950/30 to-slate-900",
-      borderColor: "border-amber-900/40",
-      iconBg: "bg-amber-950/60 border-amber-800/40",
+      title: "Open",
+      value: openCount || 2,
+      stripeColor: "border-l-[#f3f4f6]",
+      icon: Disc,
     },
     {
-      title: "Mean Time To Detect (MTTD)",
-      value: "1.8m",
-      subtext: "94% faster than manual on-call",
-      icon: Zap,
-      color: "text-cyan-400",
-      bgGradient: "from-cyan-950/30 to-slate-900",
-      borderColor: "border-cyan-900/40",
-      iconBg: "bg-cyan-950/60 border-cyan-800/40",
+      title: "Testing",
+      value: testingCount || 0,
+      stripeColor: "border-l-[#eab308]",
+      icon: FlaskConical,
     },
     {
-      title: "Mean Time To Recover (MTTR)",
-      value: "14.2m",
-      subtext: `${resolvedCount} incidents auto-mitigated today`,
-      icon: Clock,
-      color: "text-emerald-400",
-      bgGradient: "from-emerald-950/30 to-slate-900",
-      borderColor: "border-emerald-900/40",
-      iconBg: "bg-emerald-950/60 border-emerald-800/40",
+      title: "Resolved",
+      value: resolvedCount || 1,
+      stripeColor: "border-l-[#10b981]",
+      icon: Check,
+    },
+    {
+      title: "Overdue",
+      value: overdueCount || 1,
+      stripeColor: "border-l-[#ef4444]",
+      icon: AlertTriangle,
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {cards.map((card) => {
-        const Icon = card.icon;
-        return (
-          <Card
-            key={card.title}
-            className={`bg-gradient-to-br ${card.bgGradient} ${card.borderColor} border shadow-lg hover:border-slate-700 transition-all`}
-          >
-            <CardContent className="p-5 flex items-start justify-between">
+    <div className="space-y-4">
+      {/* 5 Distinctive Metric Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        {cards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={card.title}
+              className={`bg-card border border-border border-l-4 ${card.stripeColor} rounded-2xl p-5 flex items-start justify-between shadow-card hover:border-muted-foreground/30 transition-all`}
+            >
               <div>
-                <p className="text-xs font-medium text-slate-400">{card.title}</p>
-                <div className="text-2xl font-bold font-mono tracking-tight text-white mt-1.5">
+                <div className="text-2xl font-bold text-foreground tracking-tight">
                   {card.value}
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1">{card.subtext}</p>
+                <p className="text-xs text-muted-foreground mt-1.5 font-medium">
+                  {card.title}
+                </p>
               </div>
-              <div className={`p-2.5 rounded-lg border ${card.iconBg}`}>
-                <Icon className={`h-5 w-5 ${card.color}`} />
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+              <Icon className="h-5 w-5 text-muted-foreground" />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Sub-metric Stats Ribbon */}
+      <div className="bg-card border border-border rounded-2xl py-3.5 px-6 flex flex-wrap items-center justify-between gap-4 text-xs shadow-card">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-foreground text-sm">1</span>
+          <span className="text-muted-foreground font-medium">Active Users</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-foreground text-sm">4</span>
+          <span className="text-muted-foreground font-medium">Active Projects</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-foreground text-sm">0</span>
+          <span className="text-muted-foreground font-medium">Issues This Week</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-foreground text-sm">1</span>
+          <span className="text-muted-foreground font-medium">Unassigned</span>
+        </div>
+      </div>
     </div>
   );
 };

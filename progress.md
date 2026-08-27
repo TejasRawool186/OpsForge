@@ -92,3 +92,35 @@
 | **Submodule 2: Backend DB Layer** | Samar | **COMPLETED** | Pytest DB Services (5/5 passed) |
 | **Submodule 3: FastAPI APIs & Integrations** | Atharv | **COMPLETED** | Pytest Endpoints (11/11 passed) |
 | **Submodule 4: DevOps & QA Pipeline** | Vighnesh | **IN PROGRESS / NEXT** | Docker Compose & CI setup |
+| **Submodule 5: Frontend UI Overhaul & Landing Page** | Samar | **COMPLETED** | `npm run build` (10/10 pages compiled) |
+
+---
+
+## Submodule 5: Frontend UI Overhaul, Landing Page & Notifications
+- **Lead:** Samar (Backend Infrastructure Lead + Frontend UI)
+- **Status:** COMPLETED
+- **Date:** August 28, 2026
+
+### Execution Log
+1. **IssueTracker-Style UI Redesign:** Overhauled the entire OpsForge frontend to match the IssueTracker — Mini Jira visual language:
+   - Replaced neon cyan / monochrome zinc styles with left-striped KPI cards (Blue P1, White Open, Yellow Testing, Green Resolved, Red Overdue).
+   - Added sub-metric stats ribbon, priority breakdown progress bars, and recent activity log on `/incidents`.
+   - Redesigned Sidebar with purple gradient active nav pill, glowing left indicator bar, and bottom avatar badge.
+   - Redesigned Navbar with search bar, notification bell, and white ADMIN capsule.
+2. **Interactive Notifications Dropdown:**
+   - Created `NotificationsDropdown.tsx` component with live unread counter, animated pulse indicator, and categorized notification feed (Critical, Warning, Success, Info).
+   - Click-to-navigate links to `/approvals`, `/incidents/[id]`, `/reports` from each notification item.
+   - "Mark all as read" action, click-outside dismissal, and Escape key support.
+3. **Minimalist Splash Landing Page:**
+   - Created centered splash screen at `/` with OpsForge branding, subtitle, and "Click anywhere to continue" prompt.
+   - Integrated **LineWaves** WebGL animated background (from React Bits) using `ogl` dependency with `dynamic(() => import(...), { ssr: false })` for SSR safety.
+   - Tuned wave brightness to `0.08` for subtle backdrop and boosted text contrast for readability.
+4. **Refresh-to-Landing Flow:**
+   - Implemented `sessionStorage`-based session tracking in `AppLayout.tsx` so any browser refresh or new tab redirects to the landing splash page.
+   - Updated Sidebar brand logo to link to `/` (landing page).
+5. **Theme Toggle Removal:**
+   - Removed broken light/dark theme toggle from Navbar.
+   - Restored dedicated dark-only styling across `globals.css`, `tailwind.config.ts`, and all components.
+   - Cleaned up unused `ThemeProvider.tsx`.
+6. **Verification:** Verified complete production build with `npm run build` (10/10 static/dynamic pages compiled with 0 errors).
+
