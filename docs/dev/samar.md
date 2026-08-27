@@ -2,13 +2,13 @@
 
 > **Role:** Samar (Backend Infrastructure Lead)  
 > **Status:** Completed  
-> **Date:** August 26, 2026  
+> **Date:** August 28, 2026  
 
 ---
 
 ## 🏗️ Work Summary
 
-As the Backend Infrastructure Lead for **OpsForge**, Samar is responsible for the asynchronous database architecture, PostgreSQL-compatible ORM models, Alembic migrations, CRUD database services, human safety gate persistence, security audit logging, and data seeding scripts.
+As the Backend Infrastructure Lead for **OpsForge**, Samar is responsible for the asynchronous database architecture, PostgreSQL-compatible ORM models, Alembic migrations, CRUD database services, human safety gate persistence, security audit logging, data seeding scripts, and the frontend UI overhaul including the IssueTracker-style redesign, interactive notifications, and the animated landing page.
 
 ---
 
@@ -85,4 +85,31 @@ Demo environment reset script executed successfully:
 ```bash
 $ python backend/scripts/seed_demo_data.py
 INFO:__main__:Demo environment successfully reset and ready for presentation!
+```
+
+---
+
+## 🎨 Frontend UI Overhaul (Submodule 5)
+
+### IssueTracker-Style Redesign
+- Overhauled all dashboard components to match IssueTracker — Mini Jira visual language with left-striped KPI cards, stats ribbon, priority breakdown progress bars, and recent activity log.
+- Redesigned Sidebar (purple gradient active nav pill, bottom avatar badge) and Navbar (search bar, ADMIN capsule).
+
+### Interactive Notifications Dropdown
+- `NotificationsDropdown.tsx`: Live unread counter with animated pulse, categorized feed (Critical, Warning, Success, Info), click-to-navigate links, "Mark all as read" action, and click-outside/Escape dismissal.
+
+### Minimalist Splash Landing Page
+- Centered splash screen at `/` with OpsForge branding and "Click anywhere to continue" prompt.
+- **LineWaves** WebGL animated background (React Bits / `ogl`) with SSR-safe dynamic import.
+- `sessionStorage`-based refresh-to-landing flow in `AppLayout.tsx`.
+
+### Theme Toggle Removal
+- Removed broken light/dark toggle; restored dedicated dark-only styling across `globals.css`, `tailwind.config.ts`, and all components.
+
+### Verification
+```bash
+$ npm run build
+ ✓ Compiled successfully
+ ✓ Generating static pages (10/10)
+ 0 errors
 ```
