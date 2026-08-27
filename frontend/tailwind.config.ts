@@ -20,32 +20,14 @@ const config: Config = {
         },
         sidebar: {
           DEFAULT: "#0f0f13",
-          active: "#201828",
           border: "#1f1f26",
         },
-        popover: {
-          DEFAULT: "#141417",
-          foreground: "#f3f4f6",
-        },
-        primary: {
-          DEFAULT: "#ffffff",
-          foreground: "#0d0d10",
-        },
-        secondary: {
-          DEFAULT: "#1e1e24",
-          foreground: "#9ca3af",
-        },
         muted: {
-          DEFAULT: "#18181d",
-          foreground: "#6b7280",
-        },
-        accent: {
-          DEFAULT: "#262630",
-          foreground: "#f3f4f6",
+          DEFAULT: "#1e1e24",
+          foreground: "#8e8e99",
         },
         border: "#23232a",
-        input: "#18181d",
-        ring: "#6366f1",
+        input: "#141417",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
@@ -57,7 +39,6 @@ const config: Config = {
       },
       boxShadow: {
         card: "0 2px 10px 0 rgba(0, 0, 0, 0.35)",
-        glow: "0 0 20px -5px rgba(168, 85, 247, 0.2)",
       },
     },
   },

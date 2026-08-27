@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Sun, Bell, Plus } from "lucide-react";
+import { Search, Bell, Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 interface NavbarProps {
@@ -28,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
       </div>
 
-      {/* Right: Actions, Theme, Notifications & Admin Pill */}
+      {/* Right: Actions, Notifications & Admin Pill */}
       <div className="flex items-center gap-3">
         {/* Simulate Incident Button */}
         <Button
@@ -40,14 +40,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Plus className="h-3.5 w-3.5" />
           Simulate Incident
         </Button>
-
-        {/* Theme Toggle Icon Button */}
-        <button
-          className="p-2 rounded-xl text-[#8e8e99] hover:text-white hover:bg-white/[0.04] transition-colors"
-          title="Toggle Theme"
-        >
-          <Sun className="h-4.5 w-4.5" />
-        </button>
 
         {/* Notification Bell */}
         <button

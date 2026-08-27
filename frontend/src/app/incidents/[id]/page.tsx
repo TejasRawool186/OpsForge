@@ -97,39 +97,39 @@ export default function IncidentWorkspacePage() {
       <div className="flex items-center justify-between">
         <button
           onClick={() => router.push("/incidents")}
-          className="inline-flex items-center gap-1.5 text-xs text-[#8e8e99] hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Dashboard
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-[#8e8e99]">Status:</span>
+          <span className="text-xs text-muted-foreground">Status:</span>
           <StatusBadge status={incident.status} />
         </div>
       </div>
 
       {/* Incident Header Workspace Card */}
-      <div className="rounded-2xl border border-[#23232a] bg-[#141417] p-6 shadow-card space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-card space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2.5 mb-2">
-              <span className="font-mono text-xs font-bold text-white px-2.5 py-1 rounded-lg bg-[#1e1e24] border border-[#2e2e38]">
+              <span className="font-mono text-xs font-bold text-foreground px-2.5 py-1 rounded-lg bg-muted border border-border">
                 {incident.id}
               </span>
               <SeverityBadge severity={incident.severity} />
-              <span className="text-xs text-[#d1d5db] bg-[#1e1e24] px-2.5 py-1 rounded-lg border border-[#2e2e38]">
+              <span className="text-xs text-foreground bg-muted px-2.5 py-1 rounded-lg border border-border">
                 {incident.service}
               </span>
-              <span className="text-xs text-[#8e8e99] bg-[#0d0d10] px-2.5 py-1 rounded-lg border border-[#23232a]">
+              <span className="text-xs text-muted-foreground bg-background px-2.5 py-1 rounded-lg border border-border">
                 {incident.environment}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
               {incident.title}
             </h1>
             {incident.description && (
-              <p className="text-xs sm:text-sm text-[#d1d5db] mt-1 max-w-4xl">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-4xl">
                 {incident.description}
               </p>
             )}
@@ -151,28 +151,28 @@ export default function IncidentWorkspacePage() {
         </div>
 
         {/* Telemetry bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#1f1f26] text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-border text-xs">
           <div>
-            <span className="text-[#71717a] block text-[10px] uppercase font-semibold">Assigned Agent</span>
-            <div className="flex items-center gap-1.5 text-white mt-0.5 font-medium">
-              <Cpu className="h-3.5 w-3.5 text-[#8e8e99]" />
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Assigned Agent</span>
+            <div className="flex items-center gap-1.5 text-foreground mt-0.5 font-medium">
+              <Cpu className="h-3.5 w-3.5 text-muted-foreground" />
               <span>{incident.assigned_subagent || "TrueForge Supervisor"}</span>
             </div>
           </div>
 
           <div>
-            <span className="text-[#71717a] block text-[10px] uppercase font-semibold">Alert Source</span>
-            <span className="text-white block mt-0.5 font-medium">{incident.source}</span>
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Alert Source</span>
+            <span className="text-foreground block mt-0.5 font-medium">{incident.source}</span>
           </div>
 
           <div>
-            <span className="text-[#71717a] block text-[10px] uppercase font-semibold">Detected At</span>
-            <span className="text-white block mt-0.5 font-medium">{formatDate(incident.created_at)}</span>
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Detected At</span>
+            <span className="text-foreground block mt-0.5 font-medium">{formatDate(incident.created_at)}</span>
           </div>
 
           <div>
-            <span className="text-[#71717a] block text-[10px] uppercase font-semibold">Confidence</span>
-            <span className="text-emerald-400 block mt-0.5 font-medium">94% Confidence</span>
+            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Confidence</span>
+            <span className="text-emerald-600 dark:text-emerald-400 block mt-0.5 font-medium">94% Confidence</span>
           </div>
         </div>
       </div>

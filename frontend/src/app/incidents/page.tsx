@@ -78,10 +78,10 @@ export default function IncidentsPage() {
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Page Title Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
           Dashboard
         </h1>
-        <p className="text-xs sm:text-sm text-[#8e8e99] mt-1">
+        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
           Overview of all projects and issues
         </p>
       </div>
@@ -94,12 +94,12 @@ export default function IncidentsPage() {
         {/* Left Column: Priority Breakdown & Status Distribution */}
         <div className="lg:col-span-6 space-y-5">
           {/* Priority Breakdown Card */}
-          <div className="bg-[#141417] border border-[#23232a] rounded-2xl p-6 shadow-card">
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-card">
             <div className="mb-5">
-              <h2 className="text-base font-bold text-white tracking-tight">
+              <h2 className="text-base font-bold text-foreground tracking-tight">
                 Priority Breakdown
               </h2>
-              <p className="text-xs text-[#8e8e99] mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Active issues by priority level
               </p>
             </div>
@@ -107,73 +107,73 @@ export default function IncidentsPage() {
             <div className="space-y-4">
               {/* Critical */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-[#d1d5db]">
-                  <span className="h-2 w-2 rounded-full bg-white" />
+                <div className="flex items-center gap-2 w-20 text-foreground">
+                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
                   <span>Critical</span>
                 </div>
-                <div className="flex-1 h-2 bg-[#1f1f26] rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-white rounded-full transition-all"
+                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
                     style={{ width: `${(criticalCount / totalCount) * 100}%` }}
                   />
                 </div>
-                <span className="w-5 text-right text-white font-bold">{criticalCount}</span>
+                <span className="w-5 text-right text-foreground font-bold">{criticalCount}</span>
               </div>
 
               {/* High */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-[#d1d5db]">
-                  <span className="h-2 w-2 rounded-full bg-white" />
+                <div className="flex items-center gap-2 w-20 text-foreground">
+                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
                   <span>High</span>
                 </div>
-                <div className="flex-1 h-2 bg-[#1f1f26] rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-white rounded-full transition-all"
+                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
                     style={{ width: "100%" }}
                   />
                 </div>
-                <span className="w-5 text-right text-white font-bold">{highCount}</span>
+                <span className="w-5 text-right text-foreground font-bold">{highCount}</span>
               </div>
 
               {/* Medium */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-[#d1d5db]">
-                  <span className="h-2 w-2 rounded-full bg-white" />
+                <div className="flex items-center gap-2 w-20 text-foreground">
+                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
                   <span>Medium</span>
                 </div>
-                <div className="flex-1 h-2 bg-[#1f1f26] rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-white rounded-full transition-all"
+                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
                     style={{ width: `${(mediumCount / totalCount) * 100}%` }}
                   />
                 </div>
-                <span className="w-5 text-right text-white font-bold">{mediumCount}</span>
+                <span className="w-5 text-right text-foreground font-bold">{mediumCount}</span>
               </div>
 
               {/* Low */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-[#d1d5db]">
-                  <span className="h-2 w-2 rounded-full bg-white" />
+                <div className="flex items-center gap-2 w-20 text-foreground">
+                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
                   <span>Low</span>
                 </div>
-                <div className="flex-1 h-2 bg-[#1f1f26] rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-white rounded-full transition-all"
+                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
                     style={{ width: `${(lowCount / totalCount) * 100}%` }}
                   />
                 </div>
-                <span className="w-5 text-right text-white font-bold">{lowCount}</span>
+                <span className="w-5 text-right text-foreground font-bold">{lowCount}</span>
               </div>
             </div>
           </div>
 
           {/* Status Distribution Card */}
-          <div className="bg-[#141417] border border-[#23232a] rounded-2xl p-6 shadow-card">
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-card">
             <div>
-              <h2 className="text-base font-bold text-white tracking-tight">
+              <h2 className="text-base font-bold text-foreground tracking-tight">
                 Status Distribution
               </h2>
-              <p className="text-xs text-[#8e8e99] mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Issues across all statuses
               </p>
             </div>
@@ -182,43 +182,43 @@ export default function IncidentsPage() {
 
         {/* Right Column: Recent Activity */}
         <div className="lg:col-span-6">
-          <div className="bg-[#141417] border border-[#23232a] rounded-2xl p-6 shadow-card h-full flex flex-col">
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-card h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-base font-bold text-white tracking-tight">
+                <h2 className="text-base font-bold text-foreground tracking-tight">
                   Recent Activity
                 </h2>
-                <p className="text-xs text-[#8e8e99] mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   Latest system events
                 </p>
               </div>
               <Link
                 href="/reports"
-                className="text-xs text-[#8e8e99] hover:text-white font-medium flex items-center gap-1 transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground font-medium flex items-center gap-1 transition-colors"
               >
                 View All →
               </Link>
             </div>
 
-            <div className="divide-y divide-[#1f1f26] flex-1 flex flex-col justify-between">
+            <div className="divide-y divide-border flex-1 flex flex-col justify-between">
               {activities.map((act) => {
                 const Icon = act.icon;
                 return (
                   <div key={act.id} className="py-3.5 first:pt-2 last:pb-2 flex items-center justify-between gap-3 text-xs">
                     <div className="flex items-start gap-3">
-                      <div className="p-1 text-[#8e8e99] mt-0.5">
+                      <div className="p-1 text-muted-foreground mt-0.5">
                         <Icon className="h-4 w-4" />
                       </div>
                       <div>
-                        <div className="font-semibold text-white">
-                          {act.actor} <span className="font-normal text-[#d1d5db]">{act.action}</span>
+                        <div className="font-semibold text-foreground">
+                          {act.actor} <span className="font-normal text-muted-foreground">{act.action}</span>
                         </div>
-                        <p className="text-[#8e8e99] text-[11px] mt-0.5">
+                        <p className="text-muted-foreground text-[11px] mt-0.5">
                           {act.detail}
                         </p>
                       </div>
                     </div>
-                    <span className="text-[11px] text-[#71717a] font-mono whitespace-nowrap">
+                    <span className="text-[11px] text-muted-foreground font-mono whitespace-nowrap">
                       {act.date}
                     </span>
                   </div>
@@ -232,10 +232,10 @@ export default function IncidentsPage() {
       {/* Live Issues & Incidents Table */}
       <div className="pt-2">
         <div className="mb-4">
-          <h2 className="text-base font-bold text-white tracking-tight">
+          <h2 className="text-base font-bold text-foreground tracking-tight">
             All Issues & Incidents
           </h2>
-          <p className="text-xs text-[#8e8e99] mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5">
             Active telemetry and automated investigation status
           </p>
         </div>

@@ -59,39 +59,39 @@ export const IncidentSummaryCards: React.FC<IncidentSummaryCardsProps> = ({
           return (
             <div
               key={card.title}
-              className={`bg-[#141417] border border-[#23232a] border-l-4 ${card.stripeColor} rounded-2xl p-5 flex items-start justify-between shadow-card hover:border-zinc-700 transition-all`}
+              className={`bg-card border border-border border-l-4 ${card.stripeColor} rounded-2xl p-5 flex items-start justify-between shadow-card hover:border-muted-foreground/30 transition-all`}
             >
               <div>
-                <div className="text-2xl font-bold text-white tracking-tight">
+                <div className="text-2xl font-bold text-foreground tracking-tight">
                   {card.value}
                 </div>
-                <p className="text-xs text-[#8e8e99] mt-1.5 font-medium">
+                <p className="text-xs text-muted-foreground mt-1.5 font-medium">
                   {card.title}
                 </p>
               </div>
-              <Icon className="h-5 w-5 text-[#8e8e99]" />
+              <Icon className="h-5 w-5 text-muted-foreground" />
             </div>
           );
         })}
       </div>
 
       {/* Sub-metric Stats Ribbon */}
-      <div className="bg-[#141417] border border-[#23232a] rounded-2xl py-3.5 px-6 flex flex-wrap items-center justify-between gap-4 text-xs">
+      <div className="bg-card border border-border rounded-2xl py-3.5 px-6 flex flex-wrap items-center justify-between gap-4 text-xs shadow-card">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-white text-sm">1</span>
-          <span className="text-[#8e8e99] font-medium">Active Users</span>
+          <span className="font-bold text-foreground text-sm">1</span>
+          <span className="text-muted-foreground font-medium">Active Users</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-bold text-white text-sm">4</span>
-          <span className="text-[#8e8e99] font-medium">Active Projects</span>
+          <span className="font-bold text-foreground text-sm">4</span>
+          <span className="text-muted-foreground font-medium">Active Projects</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-bold text-white text-sm">0</span>
-          <span className="text-[#8e8e99] font-medium">Issues This Week</span>
+          <span className="font-bold text-foreground text-sm">0</span>
+          <span className="text-muted-foreground font-medium">Issues This Week</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-bold text-white text-sm">1</span>
-          <span className="text-[#8e8e99] font-medium">Unassigned</span>
+          <span className="font-bold text-foreground text-sm">1</span>
+          <span className="text-muted-foreground font-medium">Unassigned</span>
         </div>
       </div>
     </div>
