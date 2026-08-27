@@ -59,7 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen fixed left-0 top-0 z-40 transition-colors">
       {/* Brand Header */}
       <div className="p-6 pb-5">
-        <Link href="/incidents" className="block">
+        <Link href="/" className="block">
           <h1 className="text-xl font-bold text-foreground tracking-tight">OpsForge</h1>
           <p className="text-[10px] text-muted-foreground font-semibold tracking-wider uppercase mt-0.5">
             AUTONOMOUS SRE AGENT
