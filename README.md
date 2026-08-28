@@ -201,21 +201,21 @@ Detailed documentation is available in the `docs/` directory:
   - [Sequence-Wise Developer Tasks](docs/planning/DEVELOPER_TASKS.md)
   - [10-Phase Implementation Roadmap](docs/planning/IMPLEMENTATION_PHASES.md)
   - [Project Summary & Problem Statement](docs/planning/PROJECT_SUMMARY.md)
-  - [Master Progress Log](progress.md)
+  - [Master Progress Log](docs/planning/progress.md)
+  - [Task Plan](docs/planning/task_plan.md)
+  - [Findings & Discoveries](docs/planning/findings.md)
 - **Team Progress Logs**:
-  - [Tejas Log (Project & Frontend Lead)](docs/dev/tejas.md)
-  - [Samar Log (Backend Infrastructure Lead)](docs/dev/samar.md)
-  - [Atharv Log (Backend API Lead)](docs/dev/atharv.md)
-  - [Vighnesh Log (DevOps & QA Lead)](docs/dev/vighnesh.md)
+  - [Tejas Rawool Log (Project & Backend & DevOps Lead)](docs/dev/tejas.md)
+  - [Samar Log (Frontend Lead)](docs/dev/samar.md)
+  - [Vighnesh Log (Integration & QA Lead)](docs/dev/vighnesh.md)
 
 ---
 
 ## 👥 Team & Roles
 
-- **Tejas Rawool** — Project Lead & Frontend Lead (Agent Architecture, Next.js, Cyberpunk SRE UI)
-- **Samar** — Backend Infrastructure Lead (PostgreSQL/SQLite DB Schema, SQLAlchemy ORM, Alembic)
-- **Atharv** — Backend API & Integration Lead (FastAPI Routers, Approvals, Remediation, Multi-Format Exporter)
-- **Vighnesh** — DevOps & QA Lead (Containerization, CI/CD Pipelines, Test Suites)
+- **Tejas Rawool** — Project Lead & Backend Infrastructure & DevOps Lead (System Architecture, Async FastAPI, ORM Models, Docker/CI, Harness State Engine)
+- **Samar** — Frontend Lead (Next.js 14 App Router, SRE Command Center, IssueTracker UI, Notifications, WebGL Landing Page)
+- **Vighnesh** — Integration & QA Lead (REST API Routers, Pydantic Schemas, Safety Gate Logic, Pytest Suite, Qodo AI Reviews)
 
 ---
 

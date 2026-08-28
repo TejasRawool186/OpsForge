@@ -5,8 +5,7 @@ import { api } from "@/lib/api";
 import { ToolRegistry } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { formatDate } from "@/lib/utils";
-import { Wrench, CheckCircle2, AlertTriangle, ShieldCheck, Activity, Terminal, RefreshCw } from "lucide-react";
+import { Wrench, RefreshCw } from "lucide-react";
 
 export default function ToolsPage() {
   const [tools, setTools] = React.useState<ToolRegistry[]>([]);
@@ -60,12 +59,12 @@ export default function ToolsPage() {
 
       {/* Tools Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {tools.map((tool) => (
-          <Card key={tool.id} className="border-zinc-800/80 bg-zinc-900/40 hover:border-zinc-700 transition-all flex flex-col justify-between">
+        {tools.map((tool, idx) => (
+          <Card key={tool.name || idx} className="border-zinc-800/80 bg-zinc-900/40 hover:border-zinc-700 transition-all flex flex-col justify-between">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
-                  {tool.tool_type}
+                  {tool.tool_type || "MCP Tool"}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -73,7 +72,7 @@ export default function ToolsPage() {
                 </span>
               </div>
               <CardTitle className="text-base text-zinc-100 mt-2 font-mono">
-                {tool.name}
+                {tool.display_name || tool.name}
               </CardTitle>
               {tool.description && (
                 <CardDescription className="line-clamp-2 mt-1">
@@ -86,13 +85,26 @@ export default function ToolsPage() {
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
                   <span className="text-zinc-500 block text-[10px] uppercase">MCP Server</span>
-                  <span className="text-zinc-200 block truncate">{tool.mcp_server}</span>
+                  <span className="text-zinc-200 block truncate">{tool.mcp_server || tool.name}</span>
                 </div>
                 <div>
                   <span className="text-zinc-500 block text-[10px] uppercase">Avg Latency</span>
-                  <span className="text-zinc-200 block">{tool.avg_latency_ms}ms</span>
+                  <span className="text-zinc-200 block">{tool.avg_latency_ms || tool.latency_ms || 12}ms</span>
                 </div>
               </div>
+
+              {tool.capabilities && tool.capabilities.length > 0 && (
+                <div>
+                  <span className="text-zinc-500 block text-[10px] font-mono uppercase mb-1">Capabilities</span>
+                  <div className="flex flex-wrap gap-1">
+                    {tool.capabilities.map((cap) => (
+                      <span key={cap} className="text-[10px] font-mono bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded border border-zinc-700">
+                        {cap}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center justify-between pt-1 text-[11px] font-mono">
                 <span className="text-zinc-500">Human Approval:</span>

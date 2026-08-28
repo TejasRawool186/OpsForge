@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     # Database Settings
     # Default to sqlite async for local development & fast testing, configurable via env
     DATABASE_URL: str = os.getenv(
-        "DATABASE_URL", "sqlite+aiosqlite:///./opsforge.db"
+        "DATABASE_URL", "sqlite+aiosqlite:///./backend/opsforge.db"
     )
 
     # Database Pool Settings

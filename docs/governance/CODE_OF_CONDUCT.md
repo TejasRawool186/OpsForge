@@ -1,7 +1,7 @@
 # OpsForge Hackathon Team Code of Conduct
 ## August 22-27, 2026
 
-**Team:** Tejas (Lead), Samar, Atharv, Vighnesh  
+**Team:** Tejas (Lead), Samar, Vighnesh  
 **Project:** OpsForge (Autonomous AI Incident Response Engineer)  
 **Hackathon:** TrueForge Agent Harness
 
@@ -954,10 +954,9 @@ Each developer maintains a personal markdown file tracking:
 ### File Location
 
 ```
-OpsForge/dev/
+OpsForge/docs/dev/
 ├── tejas.md
 ├── samar.md
-├── atharv.md
 └── vighnesh.md
 ```
 
@@ -1061,7 +1060,7 @@ None
 ## Team Contributions
 
 - Mentored Samar on agent architecture
-- Helped debug Atharv's timeline component
+- Helped debug Vighnesh's integration test suite
 - Reviewed all PRs for technical soundness
 
 ---
@@ -1272,7 +1271,7 @@ No blockers, on track."
 
 **Date:** 2026-08-23  
 **Proposed by:** Samar  
-**Reviewed by:** Tejas, Atharv, Vighnesh
+**Reviewed by:** Tejas, Vighnesh
 
 **Problem:**
 Description of the problem being solved.
@@ -1402,10 +1401,9 @@ Before merging to main:
 
 ### Mentorship
 
-- **Tejas** → Agent/AI questions
-- **Samar** → Backend/API questions
-- **Atharv** → Frontend/UI questions
-- **Vighnesh** → Infrastructure/Testing questions
+- **Tejas** → Agent/Backend/DevOps questions
+- **Samar** → Frontend/UI questions
+- **Vighnesh** → Integration/Testing questions
 
 ---
 
@@ -1431,13 +1429,12 @@ Before merging to main:
 **Code of Conduct Version:** 1.0  
 **Last Updated:** 2026-08-16  
 **Hackathon:** August 22-27, 2026  
-**Team:** Tejas, Samar, Atharv, Vighnesh
+**Team:** Tejas, Samar, Vighnesh
 
 **Signatures:**
-- [ ] Tejas (Project Lead)
-- [ ] Samar (Backend)
-- [ ] Atharv (Frontend)
-- [ ] Vighnesh (DevOps/QA)
+- [ ] Tejas (Project & Backend & DevOps Lead)
+- [ ] Samar (Frontend Lead)
+- [ ] Vighnesh (Integration & QA Lead)
 
 ---
 
