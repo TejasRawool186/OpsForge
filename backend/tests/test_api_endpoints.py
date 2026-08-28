@@ -1,4 +1,4 @@
-"""Pytest suite for Atharv's FastAPI API Endpoints."""
+"""Pytest suite for Vighnesh's FastAPI API Endpoints."""
 
 import pytest
 import pytest_asyncio
