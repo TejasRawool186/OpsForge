@@ -1,89 +1,224 @@
-# OpsForge Documentation Hub
+# OpsForge — Autonomous AI Incident Response & SRE Command Center
 
-Welcome to the OpsForge project documentation repository. The root directory contains **only `README.md`**, while all comprehensive technical guides, architecture specifications, API contracts, planning schedules, team governance policies, and developer progress logs are neatly organized within categorized subdirectories inside `docs/`.
+[![Hackathon](https://img.shields.io/badge/Hackathon-The%20Agent%20Harness%20Hackathon%202026-6366f1?style=for-the-badge)](https://wemakedevs.org)
+[![Harness](https://img.shields.io/badge/Agent%20Harness-TrueForge-06b6d4?style=for-the-badge)](https://github.com/truefoundry/trueforge)
+[![Code Review](https://img.shields.io/badge/Code%20Quality-Qodo%20AI%20Reviewed-10b981?style=for-the-badge)](https://qodo.ai)
+[![License](https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge)](LICENSE)
+
+**OpsForge** is an autonomous AI incident response system and SRE command center built for **The Agent Harness Hackathon (August 24–30, 2026)**.
+
+Instead of acting as a simple chat interface that provides debugging advice, OpsForge leverages **TrueForge** as its agent runtime to actively investigate production issues, query live metrics via MCP tools, coordinate parallel subagents, execute diagnostic code safely in a sandbox, stop for human safety approvals before sensitive actions, and verify post-remediation recovery.
 
 ---
 
-## 📑 Documentation Structure Overview
+## 🌟 Why OpsForge? (Solving "The Gap")
+
+LLMs are great at explaining what *should* be done, but struggle to reliably execute real-world operations. During a production outage, SREs cannot wait for advice—they need an autonomous system that can:
+
+1. **Investigate Automatically**: Parse incident alerts and gather telemetry from logs, metrics, and deployments.
+2. **Coordinate Specialized Agents**: Parallelize domain analysis across subagents (Metrics, Logs, Git, DB).
+3. **Execute Diagnostics Safely**: Test hypotheses using sandboxed code execution.
+4. **Keep Humans in the Loop**: Enforce non-bypassable human safety gates for high-risk actions (rollbacks, DB schema changes, service restarts).
+5. **Verify & Document**: Validate metric recovery post-fix and generate multi-format post-mortem reports.
+
+---
+
+## 🛠️ TrueForge Agent Harness Capabilities
+
+OpsForge makes full use of all core **TrueForge** agent harness capabilities:
+
+| TrueForge Feature | Implementation in OpsForge |
+| :--- | :--- |
+| **MCP Tools** | Integrates Model Context Protocol servers for GitHub (`get_recent_deployments`), Grafana (`query_metrics`), PostgreSQL (`execute_query`, `get_slow_queries`), and server health registry. |
+| **Specialized Subagents** | Main Incident Agent orchestrates parallel subagents: **Metrics Agent** (time-series anomalies), **Log Agent** (exception correlation), **Git Agent** (commit/PR correlation), and **Database Agent** (query locks). |
+| **Git-Backed Skills** | Uses reusable domain instruction packs (`.trueforge/skills/incident-triage/SKILL.md`) defining multi-phase incident response protocols. |
+| **Code Execution Sandbox** | Executes diagnostic scripts and fix verifications inside isolated **Daytona** sandbox environments to avoid running arbitrary code on production hosts. |
+| **Human Safety Approval Gate** | Implements a dynamic risk matrix (`L0` Safe to `L3` Destructive). Level 2+ actions pause execution and queue an approval request for SRE authorization. |
+| **Persistent Sessions & Context** | Stores incident timelines, telemetry traces, agent hypothesis streams, and post-mortems in SQLite/PostgreSQL. |
+
+---
+
+## 🏗️ System Architecture
 
 ```
-OpsForge/
-├── README.md (Root File)
-└── docs/
-    ├── architecture/
-    │   ├── ARCHITECTURE.md                  # System architecture & component design
-    │   ├── AGENT_CAPABILITIES.md            # Multi-agent framework & subagent workflows
-    │   ├── MCP_INTEGRATIONS.md              # Model Context Protocol tool integrations
-    │   ├── SAFETY_DESIGN.md                 # Safety gates, risk framework & approvals
-    │   └── OpsForge_Project_Specification.md# Master technical specification document
-    ├── api/
-    │   └── API_ENDPOINTS.md                 # REST API endpoints, schemas & HTTP codes
-    ├── planning/
-    │   ├── DEVELOPER_TASKS.md               # Sequence-wise hackathon developer task schedule
-    │   ├── IMPLEMENTATION_PHASES.md         # 10-phase development roadmap & milestones
-    │   ├── PROJECT_SUMMARY.md               # Vision, core capabilities & executive summary
-    │   └── INDEX.md                         # Documentation index & role-based reading guide
-    ├── governance/
-    │   └── CODE_OF_CONDUCT.md               # Git workflows, code standards & team rules
-    └── dev/
-        ├── tejas.md                         # Tejas — Project Lead & Frontend Lead Log
-        ├── samar.md                         # Samar — Backend Infrastructure Lead Log
-        ├── atharv.md                        # Atharv — Backend API & Integration Lead Log
-        └── vighnesh.md                      # Vighnesh — DevOps & QA Lead Log
+                                  +---------------------------------------+
+                                  |     Next.js 14 SRE Command Center    |
+                                  |  (/incidents, /approvals, /reports)   |
+                                  +-------------------+-------------------+
+                                                      |
+                                           REST API / WebSockets
+                                                      |
+                                  +-------------------+-------------------+
+                                  |         FastAPI Backend Core          |
+                                  |   (RequestGuard, Routers, Services)   |
+                                  +-------------------+-------------------+
+                                                      |
+                                                      v
+                                  +---------------------------------------+
+                                  |      TrueForge Agent Runtime          |
+                                  |   (Orchestrator & State Machine)      |
+                                  +---------+-------------------+---------+
+                                            |                   |
+            +-------------------------------+                   +-------------------------------+
+            |                                                                                   |
+            v                                                                                   v
++-----------------------+                                                   +-----------------------+
+|  Specialized Subagents |                                                   |   MCP Tools & Server  |
+|  * Metrics Agent      |                                                   |   * GitHub MCP        |
+|  * Log Agent          |                                                   |   * Grafana MCP       |
+|  * Git Agent          |                                                   |   * PostgreSQL MCP    |
+|  * DB Agent           |                                                   |   * Tool Registry     |
++-----------+-----------+                                                   +-----------+-----------+
+            |                                                                                   |
+            +-------------------------------+---------------------------------------------------+
+                                            |
+                                            v
+                                +-----------------------+
+                                |  Safety Approval Gate |
+                                |  (L0-L3 Risk Matrix)  |
+                                +-----------+-----------+
+                                            |
+                                            v
+                                +-----------------------+
+                                |    Daytona Sandbox    |
+                                |  (Code Execution)     |
+                                +-----------------------+
 ```
 
 ---
 
-## 🎯 Quick Navigation Links
+## 🔍 Qodo Code Review Evidence
 
-### 🏗️ Architecture & System Specifications (`docs/architecture/`)
-- **[System Architecture](docs/architecture/ARCHITECTURE.md)** — High-level architecture, layer responsibilities, data flow, and tech stack.
-- **[Agent Capabilities & Workflows](docs/architecture/AGENT_CAPABILITIES.md)** — TrueForge incident agent loop, subagents (Metrics, Log, Git), and state machine design.
-- **[MCP Integrations](docs/architecture/MCP_INTEGRATIONS.md)** — Model Context Protocol specifications for GitHub, Grafana, and PostgreSQL.
-- **[Safety Design & Risk Framework](docs/architecture/SAFETY_DESIGN.md)** — Risk matrix (Level 0-3), human approval gate, and safety protocols.
-- **[Project Specifications](docs/architecture/OpsForge_Project_Specification.md)** — Comprehensive master specification document.
+> **Hackathon Requirement:** This project uses [Qodo](https://qodo.ai) for continuous automated code review across all pull requests to ensure production-grade code quality, security compliance, and repository maintainability.
 
-### 🔌 API Documentation (`docs/api/`)
-- **[API Endpoints Specification](docs/api/API_ENDPOINTS.md)** — FastAPI REST endpoints, Pydantic schemas, timeline streaming, and error contracts.
+### Qodo Workflow Integration
+- **GitHub App Setup**: Qodo was connected to `TejasRawool186/OpsForge` repository with automated `/agentic_review` triggers on every pull request.
+- **Branch Protection**: Direct pushes to `main` are restricted; all features are merged via reviewed Pull Requests.
 
-### 📅 Planning & Roadmap (`docs/planning/`)
-- **[Hackathon Developer Tasks](docs/planning/DEVELOPER_TASKS.md)** — Day-by-day sequence-wise task lists for each team member (August 22-27, 2026).
-- **[Implementation Phases](docs/planning/IMPLEMENTATION_PHASES.md)** — 10-phase development roadmap and key checkpoints.
-- **[Project Summary](docs/planning/PROJECT_SUMMARY.md)** — Core problem statement, product vision, and 30-second elevator pitch.
-- **[Documentation Index](docs/planning/INDEX.md)** — Role-based documentation index and reading guides.
+### Representative Merged Pull Request
+- **PR Link**: [Pull Request #1: Complete OpsForge Platform Core & SRE Command Center](https://github.com/TejasRawool186/OpsForge/pull/1)
 
-### 📜 Team Governance & Standards (`docs/governance/`)
-- **[Code of Conduct & Standards](docs/governance/CODE_OF_CONDUCT.md)** — Team guidelines, Git branching policy, code review rules, and security standards.
-
-### 💻 Individual Developer Logs (`docs/dev/`)
-- **[Tejas Log & Master Plan](docs/dev/tejas.md)** — Project Lead & Frontend Lead daily logs and task schedule.
-- **[Samar Log](docs/dev/samar.md)** — Backend Infrastructure Lead daily progress log.
-- **[Atharv Log](docs/dev/atharv.md)** — Backend API & Integration Lead daily progress log.
-- **[Vighnesh Log](docs/dev/vighnesh.md)** — DevOps & QA Lead daily progress log.
+### Summary of Qodo Review Findings & Resolution
+1. **Payload Size Guard & Security Headers** (`backend/app/middleware/request_guard.py`):
+   - *Qodo Finding*: Identified potential unhandled body stream reading leading to memory exhaustion on unbounded API requests.
+   - *Resolution*: Implemented 10MB payload size restriction and added security response headers (`X-Content-Type-Options`, `X-Frame-Options`).
+2. **Async Database Session Lifecycle** (`backend/app/db/session.py`):
+   - *Qodo Finding*: Flagged potential connection leak risk in async session cleanup during high concurrency.
+   - *Resolution*: Wrapped session management in explicit async context managers with automatic rollback on exception.
+3. **SSR Safety & WebGL LineWaves Component** (`frontend/src/components/ui/LineWaves.jsx`):
+   - *Qodo Finding*: Highlighted window/document reference error risk when rendering OGL WebGL components during Next.js SSR build.
+   - *Resolution*: Converted LineWaves import to dynamic SSR-disabled loading (`dynamic(() => import(...), { ssr: false })`).
+4. **API Rate Limiting & Input Validation** (`backend/app/routers/approvals.py`):
+   - *Qodo Finding*: Flagged missing parameter sanitization on approval decision payloads.
+   - *Resolution*: Added strict Pydantic validation regex and non-repudiable audit logging entries.
 
 ---
 
-## 🚀 Key Technologies & Stack
+## 🚀 Quickstart & Local Setup
 
-- **Agent Framework:** TrueForge (Core Agent Runtime & Subagent Coordinator)
-- **Frontend UI:** Next.js 13+ (TypeScript, Tailwind CSS, shadcn/ui)
-- **Backend API:** FastAPI (Python, Pydantic)
-- **Database & ORM:** PostgreSQL + SQLAlchemy + Alembic
-- **Integrations:** Model Context Protocol (GitHub MCP, Grafana MCP, PostgreSQL MCP)
-- **DevOps & Infrastructure:** Docker, Docker Compose, GitHub Actions CI/CD
-- **Testing:** Pytest (Backend), Jest (Frontend), Playwright (E2E)
+### Prerequisites
+- **Node.js**: v22.0.0 or higher
+- **Python**: v3.10 or higher
+- **TrueForge CLI**: `npx @truefoundry/trueforge`
+
+### 1. Clone & Set Up Environment
+```bash
+git clone https://github.com/TejasRawool186/OpsForge.git
+cd OpsForge
+```
+
+### 2. Run TrueForge Agent Harness
+```bash
+npx @truefoundry/trueforge
+# Opens TrueForge Harness UI at http://localhost:8790
+```
+
+### 3. Set Up & Start FastAPI Backend
+```bash
+# Navigate to backend and create virtual environment
+cd backend
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Linux/macOS:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Seed initial baseline & demo SRE incident data
+python scripts/seed_demo_data.py
+
+# Run FastAPI server
+uvicorn app.main:app --reload --port 8000
+```
+*Backend API documentation available at [http://localhost:8000/docs](http://localhost:8000/docs)*
+
+### 4. Set Up & Start Next.js Frontend
+```bash
+# In a new terminal window:
+cd frontend
+npm install
+npm run dev
+```
+*OpsForge SRE Command Center available at [http://localhost:3000](http://localhost:3000)*
 
 ---
 
-## 📞 Support & Role Reading Paths
+## 🧪 Testing & Verification
 
-- **Product Managers & Stakeholders:** Start with [Project Summary](docs/planning/PROJECT_SUMMARY.md) and [Developer Tasks](docs/planning/DEVELOPER_TASKS.md).
-- **Frontend & Agent Developers:** Read [Architecture](docs/architecture/ARCHITECTURE.md) and [Agent Capabilities](docs/architecture/AGENT_CAPABILITIES.md).
-- **Backend Engineers:** Read [API Endpoints](docs/api/API_ENDPOINTS.md) and [MCP Integrations](docs/architecture/MCP_INTEGRATIONS.md).
-- **DevOps & Security Engineers:** Read [Safety Design](docs/architecture/SAFETY_DESIGN.md) and [Code of Conduct](docs/governance/CODE_OF_CONDUCT.md).
+OpsForge maintains a strict zero-compromise testing policy:
+
+```bash
+# Run Backend Pytest Suite
+cd backend
+pytest
+
+# Output: 11 passed in 1.64s
+
+# Run Frontend Production Build Check
+cd frontend
+npm run build
+
+# Output: 10/10 static & dynamic routes compiled cleanly (0 errors)
+```
 
 ---
 
-**Last Updated:** 2026-08-16  
-**Version:** 2.0  
-**Hackathon:** The Agent Harness Hackathon (TrueForge)
+## 📑 Complete Documentation Hub
+
+Detailed documentation is available in the `docs/` directory:
+
+- **Architecture**:
+  - [System Architecture](docs/architecture/ARCHITECTURE.md)
+  - [Agent Capabilities & Subagent Architecture](docs/architecture/AGENT_CAPABILITIES.md)
+  - [MCP Integrations Specification](docs/architecture/MCP_INTEGRATIONS.md)
+  - [Safety Design & Risk Framework](docs/architecture/SAFETY_DESIGN.md)
+  - [Master Technical Specification](docs/architecture/OpsForge_Project_Specification.md)
+- **API Reference**:
+  - [API Endpoints Specification](docs/api/API_ENDPOINTS.md)
+- **Planning & Development**:
+  - [Sequence-Wise Developer Tasks](docs/planning/DEVELOPER_TASKS.md)
+  - [10-Phase Implementation Roadmap](docs/planning/IMPLEMENTATION_PHASES.md)
+  - [Project Summary & Problem Statement](docs/planning/PROJECT_SUMMARY.md)
+  - [Master Progress Log](progress.md)
+- **Team Progress Logs**:
+  - [Tejas Log (Project & Frontend Lead)](docs/dev/tejas.md)
+  - [Samar Log (Backend Infrastructure Lead)](docs/dev/samar.md)
+  - [Atharv Log (Backend API Lead)](docs/dev/atharv.md)
+  - [Vighnesh Log (DevOps & QA Lead)](docs/dev/vighnesh.md)
+
+---
+
+## 👥 Team & Roles
+
+- **Tejas Rawool** — Project Lead & Frontend Lead (Agent Architecture, Next.js, Cyberpunk SRE UI)
+- **Samar** — Backend Infrastructure Lead (PostgreSQL/SQLite DB Schema, SQLAlchemy ORM, Alembic)
+- **Atharv** — Backend API & Integration Lead (FastAPI Routers, Approvals, Remediation, Multi-Format Exporter)
+- **Vighnesh** — DevOps & QA Lead (Containerization, CI/CD Pipelines, Test Suites)
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See `LICENSE` for details.
