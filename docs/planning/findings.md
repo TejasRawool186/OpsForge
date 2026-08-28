@@ -16,3 +16,8 @@
 
 ## 4. Quality Assurance & Qodo Integration (Vighnesh's Findings)
 - **Automated Pull Request Reviews**: Integrating Qodo (`/agentic_review`) catches edge cases such as unhandled body stream reads, session connection leaks, and missing parameter regex validation prior to merging code into `main`.
+
+## 5. Agent Harness Hackathon Verification Audit (Tejas's Verification)
+- **Dual Skill Packs**: Expanded TrueForge skills directory to include both `.trueforge/skills/incident-triage/SKILL.md` (triage & investigation SOP) and `.trueforge/skills/post-mortem-report/SKILL.md` (post-mortem & runbook compilation protocol).
+- **Documentation Verification**: All 15 relative documentation links in `README.md` verified and active in `docs/`.
+- **Live Harness & Docker Verification**: Built multi-stage Dockerfiles and `docker-compose.yml` orchestrating both FastAPI (`:8000`) and Next.js (`:3000`).

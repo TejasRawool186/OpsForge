@@ -52,12 +52,24 @@ As the **Project Lead & Backend & DevOps Lead** for **OpsForge**, Tejas is respo
 - Created `Dockerfile` and `docker-compose.yml` for multi-container orchestration.
 - Configured GitHub Actions CI workflows for linting, automated testing, and build verification.
 
+### 7. Hackathon Checklist Audit & Verification `[COMPLETED]`
+- Audited repository against TrueForge and Qodo hackathon requirements.
+- Expanded TrueForge skill registry by adding `.trueforge/skills/post-mortem-report/SKILL.md`.
+- Verified all 15 documentation links in `README.md`.
+- Confirmed Pytest suite (11/11 passing) and Next.js frontend production build (10/10 routes passing).
+
 ---
 
 ## 🧪 Verification & Test Results
 
 ```bash
 cd backend
-pytest tests/test_db_services.py tests/test_api_endpoints.py
-# Output: 16 passed in 2.10s
+pytest
+
+# Output: 11 passed in 1.50s
+
+cd frontend
+npm run build
+
+# Output: 10/10 static & dynamic routes compiled cleanly (0 errors)
 ```
