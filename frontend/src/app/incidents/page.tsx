@@ -33,11 +33,11 @@ export default function IncidentsPage() {
     fetchData();
   }, []);
 
-  const criticalCount = incidents.filter((i) => i.severity === "CRITICAL").length || 0;
-  const highCount = incidents.filter((i) => i.severity === "HIGH").length || 2;
-  const mediumCount = incidents.filter((i) => i.severity === "MEDIUM").length || 0;
-  const lowCount = incidents.filter((i) => i.severity === "LOW").length || 0;
-  const totalCount = (criticalCount + highCount + mediumCount + lowCount) || 1;
+  const criticalCount = incidents.filter((i) => i.severity === "CRITICAL").length;
+  const highCount = incidents.filter((i) => i.severity === "HIGH").length;
+  const mediumCount = incidents.filter((i) => i.severity === "MEDIUM").length;
+  const lowCount = incidents.filter((i) => i.severity === "LOW").length;
+  const totalCount = criticalCount + highCount + mediumCount + lowCount || 1;
 
   const activities = [
     {

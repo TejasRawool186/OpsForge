@@ -142,15 +142,18 @@ async def root():
             "version": "1.0.0", "docs": "/docs", "api_prefix": settings.API_V1_STR}
 
 
-# Register API routers under /api prefix
-API_PREFIX = "/api"
-app.include_router(incidents_router, prefix=API_PREFIX)
-app.include_router(approvals_router, prefix=API_PREFIX)
-app.include_router(timeline_router, prefix=API_PREFIX)
-app.include_router(investigations_router, prefix=API_PREFIX)
-app.include_router(tools_router, prefix=API_PREFIX)
-app.include_router(remediation_router, prefix=API_PREFIX)
-app.include_router(reports_router, prefix=API_PREFIX)
-app.include_router(risk_assessment_router, prefix=API_PREFIX)
-app.include_router(mock_router, prefix=API_PREFIX)
+# Register API routers under /api/v1 and /api
+for r in [
+    incidents_router,
+    approvals_router,
+    timeline_router,
+    investigations_router,
+    tools_router,
+    remediation_router,
+    reports_router,
+    risk_assessment_router,
+    mock_router,
+]:
+    app.include_router(r, prefix=settings.API_V1_STR)
+    app.include_router(r, prefix="/api")
 

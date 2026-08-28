@@ -107,7 +107,7 @@ export default function ApprovalsPage() {
                   </span>
                 </div>
                 <CardTitle className="text-base text-zinc-100 mt-1">
-                  {app.action_type}: {app.action_description}
+                  {app.action || `${app.action_type || 'REMEDIATION'}: ${app.action_description || 'Production change request'}`}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 pt-3">

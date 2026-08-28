@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Search, Flame, ShieldCheck, Wrench, FileText, Settings, ArrowRight } from "lucide-react";
-import { MOCK_INCIDENTS, MOCK_TOOLS } from "@/lib/mock-data";
+import { api } from "@/lib/api";
+import { Incident, ToolRegistry } from "@/types";
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -13,12 +14,21 @@ interface CommandPaletteProps {
 export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [query, setQuery] = React.useState("");
+  const [incidents, setIncidents] = React.useState<Incident[]>([]);
+  const [tools, setTools] = React.useState<ToolRegistry[]>([]);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      api.getIncidents().then(setIncidents).catch(() => setIncidents([]));
+      api.getTools().then(setTools).catch(() => setTools([]));
+    }
+  }, [isOpen]);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        onClose(); // Toggle or open
+        onClose();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -27,17 +37,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
 
   if (!isOpen) return null;
 
-  const filteredIncidents = MOCK_INCIDENTS.filter(
+  const filteredIncidents = incidents.filter(
     (inc) =>
       inc.title.toLowerCase().includes(query.toLowerCase()) ||
       inc.id.toLowerCase().includes(query.toLowerCase()) ||
       inc.service.toLowerCase().includes(query.toLowerCase())
   );
 
-  const filteredTools = MOCK_TOOLS.filter(
+  const filteredTools = tools.filter(
     (t) =>
       t.name.toLowerCase().includes(query.toLowerCase()) ||
-      t.mcp_server.toLowerCase().includes(query.toLowerCase())
+      (t.display_name && t.display_name.toLowerCase().includes(query.toLowerCase()))
   );
 
   const handleNavigate = (path: string) => {
@@ -164,13 +174,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               <div className="space-y-0.5">
                 {filteredTools.map((tool) => (
                   <button
-                    key={tool.id}
+                    key={tool.name}
                     onClick={() => handleNavigate("/tools")}
                     className="w-full flex items-center justify-between px-3 py-2 text-xs rounded-lg text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
                   >
                     <div className="flex flex-col text-left">
-                      <span className="font-mono font-medium text-zinc-200">{tool.name}</span>
-                      <span className="text-[11px] text-zinc-500 font-mono">{tool.mcp_server}</span>
+                      <span className="font-mono font-medium text-zinc-200">{tool.display_name || tool.name}</span>
+                      <span className="text-[11px] text-zinc-500 font-mono">{tool.name}</span>
                     </div>
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
                       {tool.status}
