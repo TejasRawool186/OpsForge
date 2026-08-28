@@ -2,11 +2,11 @@
 
 ## 📚 Organized Documentation Suite
 
-**Total Documentation Files:** 13 files across 5 categorized subdirectories  
+**Total Documentation Files:** 15 files across 5 categorized subdirectories  
 **Folder Organization:**
 - `docs/architecture/` (System architecture, agent design, MCP integrations, safety & specifications)
 - `docs/api/` (API endpoints & data contracts)
-- `docs/planning/` (Developer tasks, implementation phases, project summary & index)
+- `docs/planning/` (Developer tasks, implementation phases, progress log, task plan, findings, project summary & index)
 - `docs/governance/` (Code of conduct & team standards)
 - `docs/dev/` (Individual developer progress logs)
 
@@ -15,7 +15,7 @@
 ## Document Inventory & Directory Map
 
 ### 1. Root Directory (`/`)
-- **[README.md](../../README.md)** — Main project entry point, quick navigation hub, tech stack overview, and setup instructions.
+- **[README.md](../../README.md)** — Main project entry point, hackathon presentation overview, quick navigation hub, tech stack, and setup instructions.
 
 ---
 
@@ -54,8 +54,8 @@
 ### 4. Planning & Hackathon Execution (`docs/planning/`)
 
 - **[DEVELOPER_TASKS.md](DEVELOPER_TASKS.md)**
-  - **Purpose:** Comprehensive day-by-day task lists for all 4 team members for the 6-day hackathon (August 22-27, 2026).
-  - **Audience:** Whole team (Tejas, Samar, Atharv, Vighnesh).
+  - **Purpose:** Sequence-wise task assignments for the 3 core developers (Tejas, Samar, Vighnesh).
+  - **Audience:** Whole team.
 
 - **[IMPLEMENTATION_PHASES.md](IMPLEMENTATION_PHASES.md)**
   - **Purpose:** 10-phase long-term development roadmap and project milestones.
@@ -64,6 +64,18 @@
 - **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)**
   - **Purpose:** High-level executive summary, problem statement, vision, elevator pitches, and core features.
   - **Audience:** Judges, stakeholders, team members.
+
+- **[progress.md](progress.md)**
+  - **Purpose:** Master execution log tracking project milestones and build verifications.
+  - **Audience:** Whole team, tech leads.
+
+- **[task_plan.md](task_plan.md)**
+  - **Purpose:** Detailed task plan detailing implementation breakdown per developer phase.
+  - **Audience:** Whole team.
+
+- **[findings.md](findings.md)**
+  - **Purpose:** Technical findings, architecture discoveries, and quality assurance resolutions.
+  - **Audience:** Whole team.
 
 - **[INDEX.md](INDEX.md)** — *(This Document)*
   - **Purpose:** Central document index and role-based reading guide.
@@ -78,47 +90,38 @@
 
 ---
 
-### 6. Developer Logs (`docs/dev/`)
+### 6. Developer Progress Logs (`docs/dev/`)
 
-- **[tejas.md](../dev/tejas.md)** — Tejas (Project Lead & Frontend Lead)
-- **[samar.md](../dev/samar.md)** — Samar (Backend Infrastructure Lead)
-- **[atharv.md](../dev/atharv.md)** — Atharv (Backend API & Integration Lead)
-- **[vighnesh.md](../dev/vighnesh.md)** — Vighnesh (DevOps & QA Lead)
+- **[tejas.md](../dev/tejas.md)** — Tejas Rawool (Project Lead & Backend & DevOps Lead)
+- **[samar.md](../dev/samar.md)** — Samar (Frontend Lead)
+- **[vighnesh.md](../dev/vighnesh.md)** — Vighnesh (Integration & QA Lead)
 
 ---
 
 ## 📖 Reading Paths by Role
 
-### 👨‍💼 Project Lead & Frontend Lead (Tejas)
+### 👨‍💼 Project Lead & Backend & DevOps Lead (Tejas)
 1. [README.md](../../README.md)
 2. [DEVELOPER_TASKS.md](DEVELOPER_TASKS.md)
 3. [ARCHITECTURE.md](../architecture/ARCHITECTURE.md)
 4. [AGENT_CAPABILITIES.md](../architecture/AGENT_CAPABILITIES.md)
 5. [tejas.md](../dev/tejas.md)
 
-### ⚙️ Backend Infrastructure Lead (Samar)
+### 🎨 Frontend Lead (Samar)
 1. [README.md](../../README.md)
 2. [DEVELOPER_TASKS.md](DEVELOPER_TASKS.md)
 3. [ARCHITECTURE.md](../architecture/ARCHITECTURE.md)
-4. [API_ENDPOINTS.md](../api/API_ENDPOINTS.md)
-5. [samar.md](../dev/samar.md)
+4. [samar.md](../dev/samar.md)
 
-### 🔌 Backend API & Integration Lead (Atharv)
+### 🔌 Integration & QA Lead (Vighnesh)
 1. [README.md](../../README.md)
 2. [DEVELOPER_TASKS.md](DEVELOPER_TASKS.md)
 3. [API_ENDPOINTS.md](../api/API_ENDPOINTS.md)
-4. [MCP_INTEGRATIONS.md](../architecture/MCP_INTEGRATIONS.md)
-5. [atharv.md](../dev/atharv.md)
-
-### 🚀 DevOps & QA Lead (Vighnesh)
-1. [README.md](../../README.md)
-2. [DEVELOPER_TASKS.md](DEVELOPER_TASKS.md)
-3. [SAFETY_DESIGN.md](../architecture/SAFETY_DESIGN.md)
-4. [CODE_OF_CONDUCT.md](../governance/CODE_OF_CONDUCT.md)
+4. [SAFETY_DESIGN.md](../architecture/SAFETY_DESIGN.md)
 5. [vighnesh.md](../dev/vighnesh.md)
 
 ---
 
-**Documentation Version:** 2.0  
-**Last Updated:** 2026-08-16  
-**Status:** Organized into Categorized Subdirectories
+**Documentation Version:** 3.0  
+**Last Updated:** August 28, 2026  
+**Status:** Organized & Clean
