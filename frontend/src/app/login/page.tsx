@@ -20,7 +20,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState("SRE_OPERATOR");
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -31,44 +31,75 @@ export default function LoginPage() {
     setSuccessMsg(null);
     setLoading(true);
 
-    const endpoint = isSignup ? "/api/v1/auth/signup" : "/api/v1/auth/login";
+    const authEndpoint = isSignup ? "/api/v1/auth/signup" : "/api/v1/auth/login";
     const bodyData = isSignup
-      ? { email, password, full_name: fullName, role }
-      : { email, password };
+      ? { email: email.trim(), password, full_name: fullName, role }
+      : { email: email.trim(), password };
+
+    const envUrl = process.env.NEXT_PUBLIC_API_URL || "";
+    const cleanEnvBase = envUrl ? envUrl.replace(/\/$/, "").replace(/\/api\/v1$/, "") : "";
+
+    const candidateUrls = Array.from(new Set([
+      authEndpoint,
+      `http://localhost:8000${authEndpoint}`,
+      cleanEnvBase ? `${cleanEnvBase}${authEndpoint}` : "",
+    ])).filter(Boolean);
+
+    let res: Response | null = null;
+
+    for (const url of candidateUrls) {
+      try {
+        const resp = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(bodyData),
+        });
+
+        res = resp;
+        break;
+      } catch (err) {
+        console.warn(`Connection attempt failed for ${url}:`, err);
+      }
+    }
+
+    if (!res) {
+      setError("Unable to connect to OpsForge backend service. Please check backend status.");
+      setLoading(false);
+      return;
+    }
 
     try {
-      const apiHost = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const res = await fetch(`${apiHost}${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bodyData),
-      });
-
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.detail || "Authentication failed. Please check your credentials.");
+        let errStr = "Authentication failed. Please check your credentials.";
+        if (data?.detail) {
+          errStr = typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail);
+        } else if (data?.message) {
+          errStr = data.message;
+        }
+        setError(errStr);
+        setLoading(false);
+        return;
       }
 
       // Store auth state in unified AuthContext
       login(data.access_token, data.user);
-
       setSuccessMsg(isSignup ? "Account created successfully! Redirecting..." : "Login successful! Redirecting...");
-      
+
       setTimeout(() => {
         router.push("/incidents");
-      }, 500);
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
-    } finally {
+      }, 400);
+    } catch (parseErr) {
+      setError("Received invalid response from authentication server.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0d0d10] text-white flex flex-col justify-center items-center p-6 relative overflow-hidden font-sans select-none">
-      {/* Dynamic Background Line Waves */}
-      <div className="absolute inset-0 z-0 opacity-40">
+    <div className="min-h-screen bg-[#0d0d10] text-white flex flex-col justify-center items-center p-6 relative overflow-hidden font-sans select-none animate-in fade-in duration-300">
+      {/* Shared WebGL Background — Identical to Landing Page */}
+      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
         <LineWaves
           speed={0.25}
           innerLineCount={30}
@@ -86,11 +117,11 @@ export default function LoginPage() {
         />
       </div>
 
-      {/* Decorative Orbs */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+      {/* Decorative Ambient Orbs — Identical to Landing Page */}
+      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Glassmorphism Card */}
+      {/* Glassmorphism Auth Card */}
       <div className="w-full max-w-md bg-[#141417]/90 backdrop-blur-2xl border border-[#23232a] rounded-3xl p-8 shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">
         
         {/* Header */}
@@ -157,7 +188,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="operator@opsforge.io"
+                placeholder="tejas@opsforge.io"
                 className="w-full bg-[#0d0d10] border border-[#23232a] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-[#52525b] focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
               />
             </div>

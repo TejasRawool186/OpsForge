@@ -23,7 +23,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const getApiBase = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+  const cleanBase = envUrl.replace(/\/$/, "").replace(/\/api\/v1$/, "");
+  return `${cleanBase}/api/v1`;
+};
+
+const API_BASE = getApiBase();
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -86,32 +92,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       }
 
-      // Verify token against backend /auth/me
-      try {
-        const res = await fetch(`${API_BASE}/auth/me`, {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
-        });
+      // Candidate verify endpoints
+      const candidateUrls = [
+        "/api/v1/auth/me",
+        `${API_BASE}/auth/me`,
+      ];
 
-        if (res.ok) {
-          const userData = await res.json();
-          setUser(userData);
-          localStorage.setItem("opsforge_user", JSON.stringify(userData));
-          setAuthCookie(storedToken);
-        } else {
-          // Token invalid or expired
-          localStorage.removeItem("opsforge_token");
-          localStorage.removeItem("opsforge_user");
-          setAuthCookie(null);
-          setToken(null);
-          setUser(null);
+      let verifiedUser: UserProfile | null = null;
+
+      for (const url of candidateUrls) {
+        try {
+          const res = await fetch(url, {
+            headers: {
+              Authorization: `Bearer ${storedToken}`,
+            },
+          });
+
+          if (res.ok) {
+            verifiedUser = await res.json();
+            break;
+          }
+        } catch (err) {
+          // ignore candidate error
         }
-      } catch (err) {
-        console.warn("Auth check error, using cached session:", err);
-      } finally {
-        setIsLoading(false);
       }
+
+      if (verifiedUser) {
+        setUser(verifiedUser);
+        localStorage.setItem("opsforge_user", JSON.stringify(verifiedUser));
+        setAuthCookie(storedToken);
+      } else {
+        // Token invalid or expired
+        localStorage.removeItem("opsforge_token");
+        localStorage.removeItem("opsforge_user");
+        setAuthCookie(null);
+        setToken(null);
+        setUser(null);
+      }
+      setIsLoading(false);
     };
 
     initAuth();
@@ -124,15 +142,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (isLoading) return;
 
     const isLoginPage = pathname === "/login" || pathname?.startsWith("/login");
-    const isPublicPage = isLoginPage; // /login is the only public route
+    const isLandingPage = pathname === "/";
+    const isPublicPage = isLoginPage || isLandingPage;
 
     if (!isAuthenticated && !isPublicPage) {
-      // Redirect unauthenticated user directly to /login
+      // Redirect unauthenticated user accessing protected routes directly to /login
       router.replace("/login");
-    } else if (isAuthenticated && isLoginPage) {
-      // Redirect authenticated user away from /login to main Dashboard (/incidents)
-      router.replace("/incidents");
-    } else if (isAuthenticated && pathname === "/") {
+    } else if (isAuthenticated && isPublicPage) {
+      // Redirect authenticated user away from landing/login to main Dashboard (/incidents)
       router.replace("/incidents");
     }
   }, [isAuthenticated, isLoading, pathname, router]);
