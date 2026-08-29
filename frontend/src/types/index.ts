@@ -146,3 +146,25 @@ export interface RemediationLog {
   pre_metric_val?: number | null;
   post_metric_val?: number | null;
 }
+
+export interface UserIntegration {
+  id: string;
+  user_id: string;
+  tool_name: "github" | "grafana" | "postgres" | string;
+  display_name: string;
+  config: Record<string, any>;
+  status: "CONNECTED" | "ERROR" | "UNTESTED" | string;
+  last_tested_at?: string | null;
+  error_message?: string | null;
+  created_at?: string;
+  updated_at?: string;
+  has_credentials?: boolean;
+}
+
+export interface IntegrationTestResult {
+  tool_name: string;
+  status: "CONNECTED" | "ERROR" | "UNTESTED" | string;
+  message: string;
+  details?: Record<string, any>;
+}
+

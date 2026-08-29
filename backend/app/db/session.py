@@ -25,6 +25,11 @@ if not is_sqlite:
         "max_overflow": settings.DB_MAX_OVERFLOW,
         "pool_recycle": settings.DB_POOL_RECYCLE,
         "pool_pre_ping": settings.DB_POOL_PRE_PING,
+        "connect_args": {
+            "ssl": "require",
+            "prepared_statement_cache_size": 0,
+            "statement_cache_size": 0,
+        },
     })
 
 # Create Async Engine

@@ -12,10 +12,20 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
 
     # Database Settings
-    # Default to sqlite async for local development & fast testing, configurable via env
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL", "sqlite+aiosqlite:///./data/opsforge.db"
+    # Supports Supabase PostgreSQL and SQLite fallback
+    DATABASE_URL_RAW: str = os.getenv(
+        "DATABASE_URL",
+        "postgresql+asyncpg://postgres:givemesunshine21lpa@db.lmglaazccinekrndvvqy.supabase.co:5432/postgres"
     )
+
+    @property
+    def DATABASE_URL(self) -> str:
+        url = self.DATABASE_URL_RAW
+        if url.startswith("postgresql://"):
+            return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+asyncpg://", 1)
+        return url
 
     # Database Pool Settings
     DB_POOL_SIZE: int = int(os.getenv("DB_POOL_SIZE", "10"))

@@ -8,6 +8,7 @@ from app.models.approval import Approval
 from app.models.audit import AuditLog
 from app.models.tool import ToolRegistry
 from app.models.remediation import RemediationLog
+from app.models.user_integration import UserIntegration
 
 __all__ = [
     "Base",
@@ -19,4 +20,5 @@ __all__ = [
     "AuditLog",
     "ToolRegistry",
     "RemediationLog",
+    "UserIntegration",
 ]

@@ -20,6 +20,7 @@ from app.routers.tools import router as tools_router
 from app.routers.remediation import router as remediation_router
 from app.routers.reports import router as reports_router
 from app.routers.risk_assessment import router as risk_assessment_router
+from app.routers.integrations import router as integrations_router
 from app.routers.mock import router as mock_router
 
 # Configure logging
@@ -152,6 +153,7 @@ for r in [
     remediation_router,
     reports_router,
     risk_assessment_router,
+    integrations_router,
     mock_router,
 ]:
     app.include_router(r, prefix=settings.API_V1_STR)

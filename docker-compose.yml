@@ -10,7 +10,7 @@ services:
       - API_V1_STR=/api/v1
       - PROJECT_NAME=OpsForge
       - ENVIRONMENT=production
-      - DATABASE_URL=sqlite+aiosqlite:////app/data/opsforge.db
+      - DATABASE_URL=postgresql://postgres.lmglaazccinekrndvvqy:givemesunshine21lpa@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres
     volumes:
       - ./backend/data:/app/data
     restart: unless-stopped
