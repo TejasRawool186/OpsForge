@@ -5,13 +5,14 @@ import { IncidentSummaryCards } from "@/components/incidents/IncidentSummaryCard
 import { IncidentTable } from "@/components/incidents/IncidentTable";
 import { api } from "@/lib/api";
 import { Incident, Approval } from "@/types";
-import { Plus, User, Folder, Pin, ArrowRight } from "lucide-react";
+import { Plus, User, Folder, Pin, Activity, AlertCircle, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
 export default function IncidentsPage() {
   const [incidents, setIncidents] = React.useState<Incident[]>([]);
   const [approvals, setApprovals] = React.useState<Approval[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [user, setUser] = React.useState<{ full_name?: string; email?: string } | null>(null);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -20,8 +21,8 @@ export default function IncidentsPage() {
         api.getIncidents(),
         api.getApprovals(),
       ]);
-      setIncidents(incList);
-      setApprovals(appList);
+      setIncidents(incList || []);
+      setApprovals(appList || []);
     } catch (err) {
       console.error("Failed to load incidents data:", err);
     } finally {
@@ -31,6 +32,17 @@ export default function IncidentsPage() {
 
   React.useEffect(() => {
     fetchData();
+
+    if (typeof window !== "undefined") {
+      const uStr = localStorage.getItem("opsforge_user");
+      if (uStr) {
+        try {
+          setUser(JSON.parse(uStr));
+        } catch {
+          setUser(null);
+        }
+      }
+    }
   }, []);
 
   const criticalCount = incidents.filter((i) => i.severity === "CRITICAL").length;
@@ -39,51 +51,62 @@ export default function IncidentsPage() {
   const lowCount = incidents.filter((i) => i.severity === "LOW").length;
   const totalCount = criticalCount + highCount + mediumCount + lowCount || 1;
 
-  const activities = [
-    {
-      id: "1",
-      icon: Plus,
-      actor: "System Admin",
-      action: "Created issue",
-      detail: 'Created issue "issue 1" in project #5',
-      date: "17/08/2026",
-    },
-    {
-      id: "2",
-      icon: User,
-      actor: "System Admin",
-      action: "Assigned issue",
-      detail: 'Assigned issue "issue 1" to user #1',
-      date: "17/08/2026",
-    },
-    {
-      id: "3",
-      icon: Folder,
-      actor: "System Admin",
-      action: "Created project",
-      detail: 'Created project "abc"',
-      date: "17/08/2026",
-    },
-    {
-      id: "4",
-      icon: Pin,
-      actor: "System Admin",
-      action: "user_deactivated",
-      detail: 'Deactivated user "samar" (jane@test.com)',
-      date: "23/07/2026",
-    },
-  ];
+  // Build dynamic recent activity events from actual incidents & approvals
+  const dynamicActivities = React.useMemo(() => {
+    const items: Array<{
+      id: string;
+      actor: string;
+      action: string;
+      detail: string;
+      date: string;
+      icon: any;
+    }> = [];
+
+    incidents.forEach((inc) => {
+      items.push({
+        id: `inc-${inc.id}`,
+        actor: user?.full_name || user?.email?.split("@")[0] || "Telemetry Agent",
+        action: "Detected incident",
+        detail: `${inc.title} (${inc.service})`,
+        date: inc.created_at ? new Date(inc.created_at).toLocaleDateString() : "Just now",
+        icon: AlertCircle,
+      });
+    });
+
+    approvals.forEach((app) => {
+      items.push({
+        id: `app-${app.id}`,
+        actor: "Autonomous Safety Gate",
+        action: "Requested approval",
+        detail: `${app.action_type} for incident ${app.incident_id?.substring(0, 8)}...`,
+        date: (app.requested_at || app.created_at) ? new Date(app.requested_at || app.created_at!).toLocaleDateString() : "Just now",
+        icon: Pin,
+      });
+    });
+
+    return items.slice(0, 5);
+  }, [incidents, approvals, user]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Page Title Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-          Dashboard
-        </h1>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-          Overview of all projects and issues
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            Dashboard
+          </h1>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            Overview of all live projects and SRE telemetry issues
+          </p>
+        </div>
+        <button
+          onClick={fetchData}
+          disabled={isLoading}
+          className="px-3 py-1.5 rounded-xl bg-[#141417] border border-[#23232a] text-xs font-medium text-[#8e8e99] hover:text-white flex items-center gap-2 transition-colors disabled:opacity-50"
+        >
+          <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
+          Refresh Live Data
+        </button>
       </div>
 
       {/* 5 KPI Metric Cards & Stats Ribbon */}
@@ -108,13 +131,13 @@ export default function IncidentsPage() {
               {/* Critical */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
                 <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
+                  <span className="h-2 w-2 rounded-full bg-red-500" />
                   <span>Critical</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
-                    style={{ width: `${(criticalCount / totalCount) * 100}%` }}
+                    className="h-full bg-red-500 rounded-full transition-all"
+                    style={{ width: incidents.length > 0 ? `${(criticalCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
                 <span className="w-5 text-right text-foreground font-bold">{criticalCount}</span>
@@ -123,13 +146,13 @@ export default function IncidentsPage() {
               {/* High */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
                 <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
+                  <span className="h-2 w-2 rounded-full bg-orange-500" />
                   <span>High</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
-                    style={{ width: "100%" }}
+                    className="h-full bg-orange-500 rounded-full transition-all"
+                    style={{ width: incidents.length > 0 ? `${(highCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
                 <span className="w-5 text-right text-foreground font-bold">{highCount}</span>
@@ -138,13 +161,13 @@ export default function IncidentsPage() {
               {/* Medium */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
                 <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
+                  <span className="h-2 w-2 rounded-full bg-yellow-500" />
                   <span>Medium</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
-                    style={{ width: `${(mediumCount / totalCount) * 100}%` }}
+                    className="h-full bg-yellow-500 rounded-full transition-all"
+                    style={{ width: incidents.length > 0 ? `${(mediumCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
                 <span className="w-5 text-right text-foreground font-bold">{mediumCount}</span>
@@ -153,29 +176,17 @@ export default function IncidentsPage() {
               {/* Low */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
                 <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-[var(--track-fill)]" />
+                  <span className="h-2 w-2 rounded-full bg-blue-500" />
                   <span>Low</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[var(--track-fill)] rounded-full transition-all"
-                    style={{ width: `${(lowCount / totalCount) * 100}%` }}
+                    className="h-full bg-blue-500 rounded-full transition-all"
+                    style={{ width: incidents.length > 0 ? `${(lowCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
                 <span className="w-5 text-right text-foreground font-bold">{lowCount}</span>
               </div>
-            </div>
-          </div>
-
-          {/* Status Distribution Card */}
-          <div className="bg-card border border-border rounded-2xl p-6 shadow-card">
-            <div>
-              <h2 className="text-base font-bold text-foreground tracking-tight">
-                Status Distribution
-              </h2>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Issues across all statuses
-              </p>
             </div>
           </div>
         </div>
@@ -189,7 +200,7 @@ export default function IncidentsPage() {
                   Recent Activity
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Latest system events
+                  Latest telemetry & agent activity events
                 </p>
               </div>
               <Link
@@ -200,30 +211,36 @@ export default function IncidentsPage() {
               </Link>
             </div>
 
-            <div className="divide-y divide-border flex-1 flex flex-col justify-between">
-              {activities.map((act) => {
-                const Icon = act.icon;
-                return (
-                  <div key={act.id} className="py-3.5 first:pt-2 last:pb-2 flex items-center justify-between gap-3 text-xs">
-                    <div className="flex items-start gap-3">
-                      <div className="p-1 text-muted-foreground mt-0.5">
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-foreground">
-                          {act.actor} <span className="font-normal text-muted-foreground">{act.action}</span>
+            <div className="divide-y divide-border flex-1 flex flex-col justify-start">
+              {dynamicActivities.length > 0 ? (
+                dynamicActivities.map((act) => {
+                  const Icon = act.icon;
+                  return (
+                    <div key={act.id} className="py-3 flex items-center justify-between gap-3 text-xs">
+                      <div className="flex items-start gap-3">
+                        <div className="p-1 text-indigo-400 mt-0.5 bg-indigo-500/10 rounded-lg">
+                          <Icon className="h-4 w-4" />
                         </div>
-                        <p className="text-muted-foreground text-[11px] mt-0.5">
-                          {act.detail}
-                        </p>
+                        <div>
+                          <div className="font-semibold text-foreground">
+                            {act.actor} <span className="font-normal text-muted-foreground">{act.action}</span>
+                          </div>
+                          <p className="text-muted-foreground text-[11px] mt-0.5">
+                            {act.detail}
+                          </p>
+                        </div>
                       </div>
+                      <span className="text-[11px] text-muted-foreground font-mono whitespace-nowrap">
+                        {act.date}
+                      </span>
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-mono whitespace-nowrap">
-                      {act.date}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <div className="py-8 text-center text-xs text-muted-foreground font-mono">
+                  No activity events recorded yet. Click &quot;Simulate Incident&quot; to trigger autonomous diagnosis.
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -236,7 +253,7 @@ export default function IncidentsPage() {
             All Issues & Incidents
           </h2>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Active telemetry and automated investigation status
+            Active telemetry and automated investigation status from live database
           </p>
         </div>
         <IncidentTable incidents={incidents} />

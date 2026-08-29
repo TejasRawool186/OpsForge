@@ -103,6 +103,7 @@ export interface Approval {
   status: ApprovalStatus | string;
   requested_by_agent?: string;
   requested_at: string;
+  created_at?: string;
   expires_at?: string;
   evidence_count?: number;
   approved_by?: string | null;

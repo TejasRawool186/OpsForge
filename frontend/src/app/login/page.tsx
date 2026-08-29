@@ -46,6 +46,7 @@ export default function LoginPage() {
       localStorage.setItem("opsforge_token", data.access_token);
       localStorage.setItem("opsforge_user", JSON.stringify(data.user));
       document.cookie = `opsforge_token=${data.access_token}; path=/; max-age=86400`;
+      window.dispatchEvent(new Event("opsforge_auth_change"));
 
       setSuccessMsg(isSignup ? "Account created successfully! Redirecting..." : "Login successful! Redirecting...");
       

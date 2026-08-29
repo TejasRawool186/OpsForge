@@ -19,15 +19,32 @@ export const Navbar: React.FC<NavbarProps> = ({
   const router = useRouter();
   const [user, setUser] = useState<{ email: string; full_name?: string; role: string } | null>(null);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("opsforge_user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
+  const loadUser = () => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("opsforge_user");
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch {
+          setUser(null);
+        }
+      } else {
         setUser(null);
       }
     }
+  };
+
+  useEffect(() => {
+    loadUser();
+
+    const handleAuthChange = () => loadUser();
+    window.addEventListener("opsforge_auth_change", handleAuthChange);
+    window.addEventListener("storage", handleAuthChange);
+
+    return () => {
+      window.removeEventListener("opsforge_auth_change", handleAuthChange);
+      window.removeEventListener("storage", handleAuthChange);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -35,6 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     localStorage.removeItem("opsforge_user");
     document.cookie = "opsforge_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     setUser(null);
+    window.dispatchEvent(new Event("opsforge_auth_change"));
     router.push("/login");
   };
 

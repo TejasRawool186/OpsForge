@@ -17,28 +17,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isCreateIncidentOpen, setIsCreateIncidentOpen] = React.useState(false);
 
   const isLandingPage = pathname === "/";
+  const isLoginPage = pathname === "/login";
 
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Check if page was refreshed
-      const navEntries = performance.getEntriesByType("navigation");
-      if (navEntries.length > 0) {
-        const nav = navEntries[0] as PerformanceNavigationTiming;
-        if (nav.type === "reload" && pathname !== "/") {
-          window.location.replace("/");
-          return;
-        }
-      }
-
-      // Check if session has entered
-      const hasEntered = sessionStorage.getItem("opsforge_session");
-      if (!hasEntered && pathname !== "/") {
-        window.location.replace("/");
-      }
-    }
-  }, [pathname]);
-
-  if (isLandingPage) {
+  if (isLandingPage || isLoginPage) {
     return (
       <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6]">
         {children}
