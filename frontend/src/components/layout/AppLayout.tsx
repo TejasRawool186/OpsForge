@@ -17,11 +17,12 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isCreateIncidentOpen, setIsCreateIncidentOpen] = React.useState(false);
 
   const isLandingPage = pathname === "/";
-  const isLoginPage = pathname === "/login";
+  const isLoginPage = pathname === "/login" || pathname?.startsWith("/login");
 
+  // Standalone Layout for Landing Page and Auth Login Page
   if (isLandingPage || isLoginPage) {
     return (
-      <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6]">
+      <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6] selection:bg-indigo-500/30">
         {children}
         <CreateIncidentModal
           isOpen={isCreateIncidentOpen}
@@ -31,8 +32,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     );
   }
 
+  // Full Control Room Layout for Application Pages
   return (
-    <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6] flex">
+    <div className="min-h-screen bg-[#0d0d10] text-[#f3f4f6] flex selection:bg-indigo-500/30 antialiased font-sans">
       {/* Fixed Sidebar */}
       <Sidebar />
 
