@@ -4,8 +4,8 @@ import * as React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { Shield, KeyRound, Mail, User, ArrowRight, CheckCircle2, AlertCircle, Loader2, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Shield, KeyRound, Mail, User, ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const LineWaves = dynamic(() => import("@/components/ui/LineWaves"), {
   ssr: false,
@@ -13,6 +13,8 @@ const LineWaves = dynamic(() => import("@/components/ui/LineWaves"), {
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
+
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,17 +50,14 @@ export default function LoginPage() {
         throw new Error(data.detail || "Authentication failed. Please check your credentials.");
       }
 
-      // Store Auth Session in localStorage & Cookies for SSR/Client
-      localStorage.setItem("opsforge_token", data.access_token);
-      localStorage.setItem("opsforge_user", JSON.stringify(data.user));
-      document.cookie = `opsforge_token=${data.access_token}; path=/; max-age=86400`;
-      window.dispatchEvent(new Event("opsforge_auth_change"));
+      // Store auth state in unified AuthContext
+      login(data.access_token, data.user);
 
       setSuccessMsg(isSignup ? "Account created successfully! Redirecting..." : "Login successful! Redirecting...");
       
       setTimeout(() => {
         router.push("/incidents");
-      }, 800);
+      }, 500);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
     } finally {
@@ -90,15 +89,6 @@ export default function LoginPage() {
       {/* Decorative Orbs */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Back Link */}
-      <Link
-        href="/"
-        className="absolute top-6 left-6 z-20 text-xs text-[#a1a1aa] hover:text-white flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#141417]/80 border border-[#23232a] backdrop-blur-md transition-all hover:border-[#32323d]"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Home
-      </Link>
 
       {/* Glassmorphism Card */}
       <div className="w-full max-w-md bg-[#141417]/90 backdrop-blur-2xl border border-[#23232a] rounded-3xl p-8 shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">

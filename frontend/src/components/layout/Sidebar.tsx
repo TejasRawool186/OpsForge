@@ -1,21 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
 import {
   LayoutDashboard,
   ShieldAlert,
   Wrench,
-  FileText,
-  Settings,
-  Flame,
   Activity,
+  Settings,
   LogOut,
-  User as UserIcon,
-  LogIn,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -25,48 +21,9 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({
   pendingApprovalsCount = 0,
-  activeIncidentsCount = 0,
 }) => {
   const pathname = usePathname();
-  const router = useRouter();
-  const [user, setUser] = useState<{ email: string; full_name?: string; role: string } | null>(null);
-
-  const loadUser = () => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("opsforge_user");
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-        } catch {
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
-    }
-  };
-
-  useEffect(() => {
-    loadUser();
-
-    const handleAuthChange = () => loadUser();
-    window.addEventListener("opsforge_auth_change", handleAuthChange);
-    window.addEventListener("storage", handleAuthChange);
-
-    return () => {
-      window.removeEventListener("opsforge_auth_change", handleAuthChange);
-      window.removeEventListener("storage", handleAuthChange);
-    };
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("opsforge_token");
-    localStorage.removeItem("opsforge_user");
-    document.cookie = "opsforge_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    setUser(null);
-    window.dispatchEvent(new Event("opsforge_auth_change"));
-    router.push("/login");
-  };
+  const { user, logout } = useAuth();
 
   const navigation = [
     {
@@ -97,15 +54,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
   ];
 
-  const userInitial = user?.full_name ? user.full_name.charAt(0).toUpperCase() : user?.email ? user.email.charAt(0).toUpperCase() : "G";
-  const userDisplayName = user?.full_name || (user?.email ? user.email.split("@")[0] : "Guest User");
-  const userRole = user?.role || "GUEST";
+  const userInitial = user?.full_name
+    ? user.full_name.charAt(0).toUpperCase()
+    : user?.email
+    ? user.email.charAt(0).toUpperCase()
+    : "O";
+  const userDisplayName = user?.full_name || (user?.email ? user.email.split("@")[0] : "Operator");
+  const userRole = user?.role || "SRE_OPERATOR";
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen fixed left-0 top-0 z-40 transition-colors">
       {/* Brand Header */}
       <div className="p-6 pb-5">
-        <Link href="/" className="block">
+        <Link href="/incidents" className="block">
           <h1 className="text-xl font-bold text-foreground tracking-tight">OpsForge</h1>
           <p className="text-[10px] text-muted-foreground font-semibold tracking-wider uppercase mt-0.5">
             AUTONOMOUS SRE AGENT
@@ -118,7 +79,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {navigation.map((item) => {
           const isActive =
             item.href === "/incidents"
-              ? pathname === "/incidents" || pathname === "/"
+              ? pathname === "/incidents" || pathname === "/" || pathname === "/dashboard"
               : pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
@@ -185,23 +146,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {user ? (
-          <button
-            onClick={handleLogout}
-            className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-lg shrink-0"
-            title="Sign Out"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
-        ) : (
-          <button
-            onClick={() => router.push("/login")}
-            className="text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/10 transition-colors p-1.5 rounded-lg shrink-0"
-            title="Sign In"
-          >
-            <LogIn className="h-4 w-4" />
-          </button>
-        )}
+        <button
+          onClick={logout}
+          className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-lg shrink-0"
+          title="Sign Out"
+        >
+          <LogOut className="h-4 w-4" />
+        </button>
       </div>
     </aside>
   );

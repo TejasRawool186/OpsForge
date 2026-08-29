@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { AuthProvider } from "@/context/AuthContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="bg-[#0d0d10] text-[#f3f4f6] min-h-screen antialiased">
-        <AppLayout>{children}</AppLayout>
+        <AuthProvider>
+          <AppLayout>{children}</AppLayout>
+        </AuthProvider>
       </body>
     </html>
   );

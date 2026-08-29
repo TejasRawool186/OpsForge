@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Search, Plus, LogOut, User as UserIcon } from "lucide-react";
+import { Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { NotificationsDropdown } from "./NotificationsDropdown";
+import { useAuth } from "@/context/AuthContext";
 
 interface NavbarProps {
   onOpenCommandPalette: () => void;
@@ -16,45 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenCommandPalette,
   onOpenCreateIncident,
 }) => {
-  const router = useRouter();
-  const [user, setUser] = useState<{ email: string; full_name?: string; role: string } | null>(null);
-
-  const loadUser = () => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("opsforge_user");
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-        } catch {
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
-    }
-  };
-
-  useEffect(() => {
-    loadUser();
-
-    const handleAuthChange = () => loadUser();
-    window.addEventListener("opsforge_auth_change", handleAuthChange);
-    window.addEventListener("storage", handleAuthChange);
-
-    return () => {
-      window.removeEventListener("opsforge_auth_change", handleAuthChange);
-      window.removeEventListener("storage", handleAuthChange);
-    };
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("opsforge_token");
-    localStorage.removeItem("opsforge_user");
-    document.cookie = "opsforge_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    setUser(null);
-    window.dispatchEvent(new Event("opsforge_auth_change"));
-    router.push("/login");
-  };
+  const { user, logout } = useAuth();
 
   return (
     <header className="h-16 bg-[#0d0d10] px-8 flex items-center justify-between sticky top-0 z-30 ml-64 border-b border-[#1c1c24]">
@@ -71,7 +32,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
       </div>
 
-      {/* Right: Actions, Notifications & User Info */}
+      {/* Right: Actions, Notifications & Authenticated User Profile */}
       <div className="flex items-center gap-3">
         {/* Simulate Incident Button */}
         <Button
@@ -87,8 +48,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Interactive Notifications Dropdown */}
         <NotificationsDropdown />
 
-        {/* User Capsule Badge & Logout */}
-        {user ? (
+        {/* Authenticated User Profile Capsule */}
+        {user && (
           <div className="flex items-center gap-2 bg-[#141417] border border-[#23232a] rounded-full pl-3 pr-1.5 py-1">
             <span className="text-xs font-medium text-white max-w-[120px] truncate">
               {user.full_name || user.email.split("@")[0]}
@@ -97,23 +58,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               {user.role}
             </span>
             <button
-              onClick={handleLogout}
+              onClick={logout}
               title="Logout"
               className="p-1 rounded-full text-[#8e8e99] hover:text-red-400 hover:bg-red-500/10 transition-colors ml-1"
             >
               <LogOut className="h-3.5 w-3.5" />
             </button>
           </div>
-        ) : (
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => router.push("/login")}
-            className="rounded-full bg-indigo-600 hover:bg-indigo-500 text-xs font-medium px-4 py-1.5"
-          >
-            <UserIcon className="h-3.5 w-3.5 mr-1.5" />
-            Sign In
-          </Button>
         )}
       </div>
     </header>
