@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem("opsforge_user");
       setAuthCookie(null);
     }
-    router.push("/login");
+    router.push("/");
   };
 
   useEffect(() => {
