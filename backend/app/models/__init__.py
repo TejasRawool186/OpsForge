@@ -9,6 +9,7 @@ from app.models.audit import AuditLog
 from app.models.tool import ToolRegistry
 from app.models.remediation import RemediationLog
 from app.models.user_integration import UserIntegration
+from app.models.user import User
 
 __all__ = [
     "Base",
@@ -21,4 +22,5 @@ __all__ = [
     "ToolRegistry",
     "RemediationLog",
     "UserIntegration",
+    "User",
 ]
