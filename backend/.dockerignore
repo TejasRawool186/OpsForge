@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.env
+venv/
+.venv/
+opsforge.db
+data/
+.git/
+.gitignore

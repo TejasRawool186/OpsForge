@@ -40,6 +40,8 @@ htmlcov/
 *.sqlite
 *.sqlite3
 opsforge.db
+backend/data/
+data/
 
 # Environment variables & secrets
 .env
