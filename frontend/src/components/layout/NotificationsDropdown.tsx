@@ -24,49 +24,80 @@ interface NotificationItem {
   href: string;
 }
 
-const INITIAL_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: "1",
-    title: "Safety Gate Approval Required",
-    message: "INC-2026-8801: Automated L3 rollback requires on-call human authorization.",
-    time: "2m ago",
-    type: "critical",
-    unread: true,
-    href: "/approvals",
-  },
-  {
-    id: "2",
-    title: "Investigation Hypothesis Confirmed",
-    message: "Subagent identified corrupted DB connection pool in checkout service.",
-    time: "14m ago",
-    type: "success",
-    unread: true,
-    href: "/incidents/INC-2026-8801",
-  },
-  {
-    id: "3",
-    title: "Telemetry Alert Triggered",
-    message: "Payment Gateway HTTP 500 error rate exceeded 5% threshold.",
-    time: "38m ago",
-    type: "warning",
-    unread: true,
-    href: "/incidents",
-  },
-  {
-    id: "4",
-    title: "Post-Mortem Report Published",
-    message: "Report generated for Redis Memory Exhaustion outage.",
-    time: "1h ago",
-    type: "info",
-    unread: false,
-    href: "/reports",
-  },
-];
+import { api } from "@/lib/api";
 
 export const NotificationsDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [notifications, setNotifications] = React.useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const [notifications, setNotifications] = React.useState<NotificationItem[]>([]);
+  const [loading, setLoading] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  const fetchNotifications = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const [incidents, approvals] = await Promise.all([
+        api.getIncidents().catch(() => []),
+        api.getApprovals().catch(() => []),
+      ]);
+
+      const items: NotificationItem[] = [];
+
+      // 1. Safety Gate Pending Approvals
+      (approvals || [])
+        .filter((a) => a.status === "PENDING")
+        .forEach((app) => {
+          items.push({
+            id: `app-${app.id}`,
+            title: "Safety Gate Approval Required",
+            message: app.action || app.action_description || `Incident ${app.incident_id}: Human authorization gate pending`,
+            time: app.requested_at ? new Date(app.requested_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Just now",
+            type: "critical",
+            unread: true,
+            href: "/approvals",
+          });
+        });
+
+      // 2. Active Unresolved Incidents
+      (incidents || [])
+        .filter((i) => i.status !== "RESOLVED" && i.status !== "CLOSED")
+        .forEach((inc) => {
+          items.push({
+            id: `inc-${inc.id}`,
+            title: `Telemetry Alert (${inc.severity || 'HIGH'})`,
+            message: `${inc.title} - ${inc.service || 'system'}`,
+            time: inc.created_at ? new Date(inc.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Recent",
+            type: inc.severity === "CRITICAL" ? "critical" : "warning",
+            unread: true,
+            href: `/incidents/${inc.id}`,
+          });
+        });
+
+      // 3. Resolved Incident Reports
+      (incidents || [])
+        .filter((i) => i.status === "RESOLVED")
+        .forEach((inc) => {
+          items.push({
+            id: `res-${inc.id}`,
+            title: "Post-Mortem Report Ready",
+            message: `Root cause analysis completed for ${inc.title}`,
+            time: inc.updated_at ? new Date(inc.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Recent",
+            type: "success",
+            unread: false,
+            href: "/reports",
+          });
+        });
+
+      setNotifications(items);
+    } catch (err) {
+      console.error("Failed to load notifications:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
 
@@ -87,13 +118,14 @@ export const NotificationsDropdown: React.FC = () => {
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleKeyDown);
+      fetchNotifications();
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, fetchNotifications]);
 
   const markAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
@@ -109,13 +141,13 @@ export const NotificationsDropdown: React.FC = () => {
   const getTypeIcon = (type: NotificationItem["type"]) => {
     switch (type) {
       case "critical":
-        return <ShieldAlert className="h-4 w-4 text-red-400" />;
+        return <ShieldAlert className="h-4 w-4 text-white" />;
       case "warning":
-        return <AlertTriangle className="h-4 w-4 text-amber-400" />;
+        return <AlertTriangle className="h-4 w-4 text-zinc-300" />;
       case "success":
-        return <CheckCircle2 className="h-4 w-4 text-emerald-400" />;
+        return <CheckCircle2 className="h-4 w-4 text-zinc-200" />;
       case "info":
-        return <FileText className="h-4 w-4 text-blue-400" />;
+        return <FileText className="h-4 w-4 text-zinc-400" />;
     }
   };
 
@@ -135,8 +167,8 @@ export const NotificationsDropdown: React.FC = () => {
         <Bell className="h-4.5 w-4.5" />
         {unreadCount > 0 && (
           <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
           </span>
         )}
       </button>
@@ -149,7 +181,7 @@ export const NotificationsDropdown: React.FC = () => {
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-white tracking-tight">Notifications</h3>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-zinc-800 text-zinc-200 border border-zinc-700 font-mono">
                   {unreadCount} new
                 </span>
               )}
@@ -208,7 +240,7 @@ export const NotificationsDropdown: React.FC = () => {
                   </div>
 
                   {item.unread && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                   )}
                 </Link>
               ))

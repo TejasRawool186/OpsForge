@@ -54,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="text-xs font-medium text-white max-w-[120px] truncate">
               {user.full_name || user.email.split("@")[0]}
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 text-[10px] font-bold uppercase">
+            <span className="px-2 py-0.5 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold uppercase font-mono">
               {user.role}
             </span>
             <button
