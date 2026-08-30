@@ -169,3 +169,96 @@ export interface IntegrationTestResult {
   details?: Record<string, any>;
 }
 
+// ---- Workspace & Onboarding Types ----
+
+export type OnboardingStep =
+  | "welcome"
+  | "workspace"
+  | "github"
+  | "github-callback"
+  | "repositories"
+  | "grafana"
+  | "postgres"
+  | "safety"
+  | "readiness"
+  | "complete";
+
+export interface Workspace {
+  id: string;
+  name: string;
+  environment: string;
+  region: string;
+  owner_id: string;
+  onboarding_status: string;
+  onboarding_step: OnboardingStep | string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OnboardingState {
+  has_workspace: boolean;
+  workspace_id?: string;
+  workspace_name?: string;
+  onboarding_required: boolean;
+  step: OnboardingStep | string;
+  status: string;
+}
+
+export interface GitHubConnectionInfo {
+  connected: boolean;
+  status: string;
+  github_username?: string;
+  auth_method?: string;
+  installation_id?: string;
+  selected_repository?: GitHubRepo | null;
+  connection?: Record<string, any>;
+}
+
+export interface GitHubRepo {
+  id: string;
+  owner: string;
+  name: string;
+  full_name: string;
+  default_branch: string;
+  private?: boolean;
+  description?: string;
+  is_selected?: boolean;
+}
+
+export interface ReadinessCheckResult {
+  github: {
+    connected: boolean;
+    repository_accessible: boolean;
+    recent_commits_available: boolean;
+    pull_requests_available: boolean;
+    message: string;
+  };
+  grafana: {
+    connected: boolean;
+    metrics_available: boolean;
+    prometheus_available: boolean;
+    alerts_available: boolean;
+    message: string;
+  };
+  postgres: {
+    connected: boolean;
+    readonly: boolean;
+    schema_accessible: boolean;
+    query_diagnostics_available: boolean;
+    message: string;
+  };
+  agent_harness: {
+    available: boolean;
+    message: string;
+  };
+  safety: {
+    configured: boolean;
+    approval_gate_active: boolean;
+    message: string;
+  };
+  overall_ready: boolean;
+  connected_count: number;
+  total_count: number;
+}
+
