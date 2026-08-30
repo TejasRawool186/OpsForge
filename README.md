@@ -7,7 +7,28 @@
 
 **OpsForge** is an autonomous AI incident response system and SRE command center built for **The Agent Harness Hackathon (August 24–30, 2026)**.
 
-Instead of acting as a simple chat interface that provides debugging advice, OpsForge leverages **TrueForge** as its agent runtime to actively investigate production issues, query live metrics via MCP tools, coordinate parallel subagents, execute diagnostic code safely in a sandbox, stop for human safety approvals before sensitive actions, and verify post-remediation recovery.
+Instead of acting as a simple chat interface that provides debugging advice, OpsForge leverages **TrueForge** as its agent runtime to actively investigate production issues, query live metrics via MCP tools, coordinate incident state workflows, execute diagnostic verifications, stop for human safety approvals before sensitive actions, and generate automated post-mortems.
+
+---
+
+## 📊 Current Implementation Status
+
+OpsForge follows an honest, transparent engineering model distinguishing live, production-ready capabilities from architected roadmap designs:
+
+### 🟢 Implemented & Verified (Production Ready)
+- **Interactive Onboarding Wizard & Multi-Tenant Workspaces**: 4-step interactive onboarding (`/onboarding`), workspace management (`/workspace`), and GitHub App connect/browse/disconnect flow.
+- **Outbound GitHub Integration**: Real `httpx`-based GitHub App authentication and API integration (`github_app_service.py`).
+- **Incident Response & State Engine**: Real-time incident lifecycle management (`/incidents`, `/api/v1/incidents`) backed by async database state.
+- **Server-Enforced Human Safety Approval Gate**: Non-bypassable risk engine (`/approvals`, `/api/v1/risk-assessment`, `/api/v1/approvals`) classifying actions from Level 0 (Safe) to Level 3 (Destructive).
+- **Automated SRE Reports & Post-Mortems**: Dynamic post-mortem generation and report export (`/reports`, `/api/v1/reports`).
+- **MCP Tool Status & Health Registry**: DB-backed MCP tool health and latency monitoring (`/tools`, `/api/v1/tools`).
+- **Containerized Stack**: Complete Docker Compose setup (`docker-compose.yml`, Dockerfiles for FastAPI & Next.js 14).
+- **TrueForge Git-Backed Skills**: 2 reusable domain instruction packs in `.trueforge/skills/` (`incident-triage`, `post-mortem-report`).
+- **Verified Test Suite**: 14/14 Pytest backend tests passing and 10/10 Next.js frontend routes compiling cleanly.
+
+### 🟡 Architected / Planned Roadmap
+- **Full Daytona Sandbox Execution**: Isolated code sandbox execution runtime (currently handled via FastAPI server-side verification handlers).
+- **Parallel Subagent Swarm**: Multi-agent swarm (Metrics, Log, Git, DB workers) orchestrated by a single primary Incident Agent.
 
 ---
 
@@ -16,8 +37,8 @@ Instead of acting as a simple chat interface that provides debugging advice, Ops
 LLMs are great at explaining what *should* be done, but struggle to reliably execute real-world operations. During a production outage, SREs cannot wait for advice—they need an autonomous system that can:
 
 1. **Investigate Automatically**: Parse incident alerts and gather telemetry from logs, metrics, and deployments.
-2. **Coordinate Specialized Agents**: Parallelize domain analysis across subagents (Metrics, Logs, Git, DB).
-3. **Execute Diagnostics Safely**: Test hypotheses using sandboxed code execution.
+2. **Execute State Machine Workflows**: Guide incidents through triage, investigation, remediation, and post-mortem phases.
+3. **Execute Diagnostics Safely**: Verify hypotheses using controlled diagnostic checks.
 4. **Keep Humans in the Loop**: Enforce non-bypassable human safety gates for high-risk actions (rollbacks, DB schema changes, service restarts).
 5. **Verify & Document**: Validate metric recovery post-fix and generate multi-format post-mortem reports.
 
@@ -25,16 +46,16 @@ LLMs are great at explaining what *should* be done, but struggle to reliably exe
 
 ## 🛠️ TrueForge Agent Harness Capabilities
 
-OpsForge makes full use of all core **TrueForge** agent harness capabilities:
+OpsForge maps core **TrueForge** agent harness capabilities directly to SRE workflows:
 
-| TrueForge Feature | Implementation in OpsForge |
+| TrueForge Feature | Implementation Status in OpsForge |
 | :--- | :--- |
-| **MCP Tools** | Integrates Model Context Protocol servers for GitHub (`get_recent_deployments`), Grafana (`query_metrics`), PostgreSQL (`execute_query`, `get_slow_queries`), and server health registry. |
-| **Specialized Subagents** | Main Incident Agent orchestrates parallel subagents: **Metrics Agent** (time-series anomalies), **Log Agent** (exception correlation), **Git Agent** (commit/PR correlation), and **Database Agent** (query locks). |
-| **Git-Backed Skills** | Uses reusable domain instruction packs (`.trueforge/skills/incident-triage/SKILL.md`) defining multi-phase incident response protocols. |
-| **Code Execution Sandbox** | Executes diagnostic scripts and fix verifications inside isolated **Daytona** sandbox environments to avoid running arbitrary code on production hosts. |
-| **Human Safety Approval Gate** | Implements a dynamic risk matrix (`L0` Safe to `L3` Destructive). Level 2+ actions pause execution and queue an approval request for SRE authorization. |
-| **Persistent Sessions & Context** | Stores incident timelines, telemetry traces, agent hypothesis streams, and post-mortems in SQLite/PostgreSQL. |
+| **MCP Tools** | **Implemented**: DB-backed tool health & latency registry (`/tools`) combined with real outbound GitHub App API calls (`github_app_service.py`). *(Grafana/Postgres MCP tool servers architected in registry).* |
+| **Orchestrated Agent** | **Implemented**: Primary Incident Agent state engine orchestrating investigation and recovery workflows. *(Parallel multi-agent subagent swarm architected).* |
+| **Git-Backed Skills** | **Implemented**: 2 domain instruction packs in `.trueforge/skills/` (`incident-triage/SKILL.md` and `post-mortem-report/SKILL.md`) defining multi-phase incident response protocols. |
+| **Code Execution Sandbox** | **Architected**: Sandbox execution design for Daytona containers; current verifications run via backend diagnostic handlers. |
+| **Human Safety Approval Gate** | **Implemented**: Server-enforced risk assessment matrix (`L0` Safe to `L3` Destructive). Level 2+ actions pause execution and queue authorization requests at `/api/v1/approvals`. |
+| **Persistent Sessions & Context** | **Implemented**: Async SQLAlchemy models + Alembic migrations (`workspace`, `github_connection`, `incident`, `timeline`, `report`) persisting telemetry and incident state. |
 
 ---
 
@@ -42,8 +63,8 @@ OpsForge makes full use of all core **TrueForge** agent harness capabilities:
 
 ```
                                   +---------------------------------------+
-                                  |     Next.js 14 SRE Command Center    |
-                                  |  (/incidents, /approvals, /reports)   |
+                                  |     Next.js 14 SRE Command Center     |
+                                  | (/onboarding, /incidents, /approvals) |
                                   +-------------------+-------------------+
                                                       |
                                            REST API / WebSockets
@@ -63,11 +84,9 @@ OpsForge makes full use of all core **TrueForge** agent harness capabilities:
             |                                                                                   |
             v                                                                                   v
 +-----------------------+                                                   +-----------------------+
-|  Specialized Subagents |                                                   |   MCP Tools & Server  |
-|  * Metrics Agent      |                                                   |   * GitHub MCP        |
-|  * Log Agent          |                                                   |   * Grafana MCP       |
-|  * Git Agent          |                                                   |   * PostgreSQL MCP    |
-|  * DB Agent           |                                                   |   * Tool Registry     |
+| TrueForge Git Skills  |                                                   |   MCP Tools & Server  |
+| * incident-triage     |                                                   |   * GitHub Integration|
+| * post-mortem-report  |                                                   |   * Tool Registry     |
 +-----------+-----------+                                                   +-----------+-----------+
             |                                                                                   |
             +-------------------------------+---------------------------------------------------+
@@ -80,8 +99,8 @@ OpsForge makes full use of all core **TrueForge** agent harness capabilities:
                                             |
                                             v
                                 +-----------------------+
-                                |    Daytona Sandbox    |
-                                |  (Code Execution)     |
+                                |    Diagnostic Engine  |
+                                |  (Verification Flow)  |
                                 +-----------------------+
 ```
 
@@ -89,55 +108,66 @@ OpsForge makes full use of all core **TrueForge** agent harness capabilities:
 
 ## 🔍 Qodo Code Review Evidence
 
-> **Hackathon Requirement:** This project uses [Qodo](https://qodo.ai) for continuous automated code review across all pull requests to ensure production-grade code quality, security compliance, and repository maintainability.
+> **Hackathon Requirement:** This project uses [Qodo](https://qodo.ai) for continuous automated code review across pull requests to ensure production-grade code quality, security compliance, and repository maintainability.
 
 ### Qodo Workflow Integration
-- **GitHub App Setup**: Qodo was connected to `TejasRawool186/OpsForge` repository with automated `/agentic_review` triggers on every pull request.
-- **Branch Protection**: Direct pushes to `main` are restricted; all features are merged via reviewed Pull Requests.
+- **GitHub App Setup**: Qodo was connected to `TejasRawool186/OpsForge` repository with automated `/agentic_review` triggers on pull requests.
+- **Branch Protection & Quality Gates**: Main branch protection configured with mandatory automated code review checks.
 
 ### Representative Merged Pull Request
-- **PR Link**: [Pull Request #1: Complete OpsForge Platform Core & SRE Command Center](https://github.com/TejasRawool186/OpsForge/pull/1)
+- **PR Link**: [Pull Request #6: Dockerization, Containerized Builds & Visual Polish](https://github.com/TejasRawool186/OpsForge/pull/6)
 
 ### Summary of Qodo Review Findings & Resolution
-1. **Payload Size Guard & Security Headers** (`backend/app/middleware/request_guard.py`):
-   - *Qodo Finding*: Identified potential unhandled body stream reading leading to memory exhaustion on unbounded API requests.
-   - *Resolution*: Implemented 10MB payload size restriction and added security response headers (`X-Content-Type-Options`, `X-Frame-Options`).
-2. **Async Database Session Lifecycle** (`backend/app/db/session.py`):
-   - *Qodo Finding*: Flagged potential connection leak risk in async session cleanup during high concurrency.
-   - *Resolution*: Wrapped session management in explicit async context managers with automatic rollback on exception.
-3. **SSR Safety & WebGL LineWaves Component** (`frontend/src/components/ui/LineWaves.jsx`):
-   - *Qodo Finding*: Highlighted window/document reference error risk when rendering OGL WebGL components during Next.js SSR build.
-   - *Resolution*: Converted LineWaves import to dynamic SSR-disabled loading (`dynamic(() => import(...), { ssr: false })`).
-4. **API Rate Limiting & Input Validation** (`backend/app/routers/approvals.py`):
-   - *Qodo Finding*: Flagged missing parameter sanitization on approval decision payloads.
-   - *Resolution*: Added strict Pydantic validation regex and non-repudiable audit logging entries.
+1. **LineWaves Animation Loop Cleanup** (`frontend/src/components/ui/LineWaves.jsx`):
+   - *Qodo Finding*: Highlighted missing canvas resize event listener cleanup and potential animation loop memory leak on component unmount.
+   - *Resolution*: Added clean `cancelAnimationFrame` handle and explicit `window.removeEventListener('resize')` teardown in `useEffect`.
+2. **Container Environment & Port Mapping** (`docker-compose.yml` & `frontend/Dockerfile`):
+   - *Qodo Finding*: Flagged missing environment fallbacks and container network host binding consistency between Next.js production build and FastAPI service.
+   - *Resolution*: Configured explicit `NEXT_PUBLIC_API_URL` build args, non-root user permissions, and exposed container port specs.
+3. **Workspace Model Cascade Deletion** (`backend/app/models/workspace.py`):
+   - *Qodo Finding*: Identified potential orphaned records when deleting parent workspace entities without foreign key cascade constraints.
+   - *Resolution*: Implemented SQLAlchemy `cascade="all, delete-orphan"` relationships across workspace entities.
+4. **Pydantic Tool Schema Validation** (`backend/app/schemas/tool.py`):
+   - *Qodo Finding*: Noted unvalidated latency integer inputs allowing negative or out-of-range tool telemetry values.
+   - *Resolution*: Enforced strict `Field(ge=0, le=60000)` non-negative validation constraints.
 
 ---
 
 ## 🚀 Quickstart & Local Setup
 
-### Prerequisites
+### Option A: Docker Compose Setup (Recommended)
+```bash
+git clone https://github.com/TejasRawool186/OpsForge.git
+cd OpsForge
+
+# Launch full stack (FastAPI Backend + Next.js Frontend)
+docker compose up --build
+```
+- **SRE Command Center**: [http://localhost:3000](http://localhost:3000)
+- **Onboarding Wizard**: [http://localhost:3000/onboarding](http://localhost:3000/onboarding)
+- **FastAPI API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+### Option B: Manual Local Setup
+
+#### Prerequisites
 - **Node.js**: v22.0.0 or higher
 - **Python**: v3.10 or higher
 - **TrueForge CLI**: `npx @truefoundry/trueforge`
 
-### 1. Clone & Set Up Environment
-```bash
-git clone https://github.com/TejasRawool186/OpsForge.git
-cd OpsForge
-```
-
-### 2. Run TrueForge Agent Harness
+#### 1. Run TrueForge Agent Harness
 ```bash
 npx @truefoundry/trueforge
 # Opens TrueForge Harness UI at http://localhost:8790
 ```
 
-### 3. Set Up & Start FastAPI Backend
+#### 2. Set Up & Start FastAPI Backend
 ```bash
-# Navigate to backend and create virtual environment
 cd backend
 python -m venv venv
+
+# Activate virtual environment
 # On Windows:
 .\venv\Scripts\activate
 # On Linux/macOS:
@@ -146,22 +176,20 @@ source venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Seed initial baseline & demo SRE incident data
+# Run migrations & seed initial SRE incident data
 python scripts/seed_demo_data.py
 
-# Run FastAPI server
+# Start FastAPI dev server
 uvicorn app.main:app --reload --port 8000
 ```
-*Backend API documentation available at [http://localhost:8000/docs](http://localhost:8000/docs)*
 
-### 4. Set Up & Start Next.js Frontend
+#### 3. Set Up & Start Next.js Frontend
 ```bash
 # In a new terminal window:
 cd frontend
 npm install
 npm run dev
 ```
-*OpsForge SRE Command Center available at [http://localhost:3000](http://localhost:3000)*
 
 ---
 
@@ -174,7 +202,7 @@ OpsForge maintains a strict zero-compromise testing policy:
 cd backend
 pytest
 
-# Output: 11 passed in 1.64s
+# Output: 14 passed in 4.95s (4 test files: API, DB Models, Services, Onboarding)
 
 # Run Frontend Production Build Check
 cd frontend
@@ -197,8 +225,10 @@ Detailed documentation is available in the `docs/` directory:
   - [Master Technical Specification](docs/architecture/OpsForge_Project_Specification.md)
 - **API Reference**:
   - [API Endpoints Specification](docs/api/API_ENDPOINTS.md)
+- **Governance**:
+  - [Code of Conduct](docs/governance/CODE_OF_CONDUCT.md)
 - **Planning & Development**:
-  - [Sequence-Wise Developer Tasks](docs/planning/DEVELOPER_TASKS.md)
+  - [Developer Tasks & Blueprint](docs/planning/DEVELOPER_TASKS.md)
   - [10-Phase Implementation Roadmap](docs/planning/IMPLEMENTATION_PHASES.md)
   - [Project Summary & Problem Statement](docs/planning/PROJECT_SUMMARY.md)
   - [Master Progress Log](docs/planning/progress.md)
@@ -213,8 +243,8 @@ Detailed documentation is available in the `docs/` directory:
 
 ## 👥 Team & Roles
 
-- **Tejas Rawool** — Project Lead & Backend Infrastructure & DevOps Lead (System Architecture, Async FastAPI, ORM Models, Docker/CI, Harness State Engine)
-- **Samar** — Frontend Lead (Next.js 14 App Router, SRE Command Center, IssueTracker UI, Notifications, WebGL Landing Page)
+- **Tejas Rawool** — Project Lead & Backend Infrastructure & DevOps Lead (System Architecture, Async FastAPI, ORM Models, Docker/CI, Harness Integration)
+- **Samar** — Frontend Lead (Next.js 14 App Router, SRE Command Center, Onboarding Wizard, WebGL Landing Page)
 - **Vighnesh** — Integration & QA Lead (REST API Routers, Pydantic Schemas, Safety Gate Logic, Pytest Suite, Qodo AI Reviews)
 
 ---
