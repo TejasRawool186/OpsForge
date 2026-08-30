@@ -6,6 +6,8 @@ services:
     container_name: opsforge-backend
     ports:
       - "8000:8000"
+    env_file:
+      - ./backend/.env
     environment:
       - API_V1_STR=/api/v1
       - PROJECT_NAME=OpsForge
@@ -13,6 +15,7 @@ services:
       - DATABASE_URL=postgresql://postgres.lmglaazccinekrndvvqy:givemesunshine21lpa@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres
     volumes:
       - ./backend/data:/app/data
+      - ./backend/app:/app/app
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -28,7 +31,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - BACKEND_URL=http://backend:8000
+      - NEXT_PUBLIC_API_URL=/api/v1
     depends_on:
       - backend
     restart: unless-stopped

@@ -6,13 +6,14 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-ENV NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+ENV NEXT_PUBLIC_API_URL=/api/v1
 RUN npm run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV BACKEND_URL=http://backend:8000
 
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
