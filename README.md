@@ -3,9 +3,12 @@
 [![Hackathon](https://img.shields.io/badge/Hackathon-The%20Agent%20Harness%20Hackathon%202026-6366f1?style=for-the-badge)](https://wemakedevs.org)
 [![Harness](https://img.shields.io/badge/Agent%20Harness-TrueForge-06b6d4?style=for-the-badge)](https://github.com/truefoundry/trueforge)
 [![Code Review](https://img.shields.io/badge/Code%20Quality-Qodo%20AI%20Reviewed-10b981?style=for-the-badge)](https://qodo.ai)
+[![Demo Video](https://img.shields.io/badge/Demo%20Video-YouTube-ff0000?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=Mpe9J7v2ChY)
 [![License](https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge)](LICENSE)
 
-**OpsForge** is an autonomous AI incident response system and SRE command center built for **The Agent Harness Hackathon (August 24–30, 2026)**.
+**OpsForge** is an autonomous AI incident response system and SRE command center built for **The Agent Harness Hackathon**.
+
+> 🎬 **Watch the Demo Video**: [YouTube Demo Walkthrough](https://www.youtube.com/watch?v=Mpe9J7v2ChY)
 
 Instead of acting as a simple chat interface that provides debugging advice, OpsForge leverages **TrueForge** as its agent runtime to actively investigate production issues, query live metrics via MCP tools, coordinate incident state workflows, execute diagnostic verifications, stop for human safety approvals before sensitive actions, and generate automated post-mortems.
 
