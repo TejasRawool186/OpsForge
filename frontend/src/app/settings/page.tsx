@@ -41,24 +41,24 @@ export default function SettingsPage() {
 
   // Form State for Tools
   const [githubForm, setGithubForm] = React.useState({
-    displayName: "OpsForge GitHub",
-    repoOwner: "TejasRawool186",
-    repoName: "OpsForge",
+    displayName: "GitHub Integration",
+    repoOwner: "",
+    repoName: "",
     token: "",
   });
 
   const [grafanaForm, setGrafanaForm] = React.useState({
     displayName: "Grafana Enterprise",
-    baseUrl: "https://grafana.example.com",
+    baseUrl: "",
     apiKey: "",
   });
 
   const [postgresForm, setPostgresForm] = React.useState({
-    displayName: "Supabase App DB",
-    host: "aws-0-ap-northeast-1.pooler.supabase.com",
-    port: "6543",
-    dbName: "postgres",
-    username: "postgres.lmglaazccinekrndvvqy",
+    displayName: "PostgreSQL Production DB",
+    host: "",
+    port: "5432",
+    dbName: "",
+    username: "",
     password: "",
   });
 
@@ -66,7 +66,7 @@ export default function SettingsPage() {
   const loadIntegrations = React.useCallback(async () => {
     try {
       setLoading(true);
-      const data = await api.getUserIntegrations("demo_user");
+      const data = await api.getUserIntegrations();
       setIntegrations(data);
 
       // Pre-fill forms if integrations exist
@@ -139,7 +139,6 @@ export default function SettingsPage() {
     setSavingTool(toolName);
     try {
       const saved = await api.saveUserIntegration({
-        user_id: "demo_user",
         tool_name: toolName,
         display_name: displayName,
         config,
