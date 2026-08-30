@@ -23,6 +23,9 @@ from app.routers.risk_assessment import router as risk_assessment_router
 from app.routers.integrations import router as integrations_router
 from app.routers.auth import router as auth_router
 from app.routers.mock import router as mock_router
+from app.routers.workspace import router as workspace_router
+from app.routers.github_app import router as github_app_router
+from app.routers.onboarding import router as onboarding_router
 
 # Configure logging
 logging.basicConfig(
@@ -157,6 +160,9 @@ for r in [
     integrations_router,
     auth_router,
     mock_router,
+    workspace_router,
+    github_app_router,
+    onboarding_router,
 ]:
     app.include_router(r, prefix=settings.API_V1_STR)
     app.include_router(r, prefix="/api")

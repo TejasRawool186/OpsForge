@@ -66,7 +66,7 @@ export default function IncidentWorkspacePage() {
   if (!incident) {
     return (
       <div className="text-center py-20">
-        <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-3" />
+        <AlertCircle className="h-12 w-12 text-zinc-400 mx-auto mb-3" />
         <h2 className="text-lg font-bold text-zinc-100">Incident Not Found</h2>
         <p className="text-xs text-zinc-400 mt-1">
           No incident matching ID {incidentId} was located.
@@ -118,10 +118,10 @@ export default function IncidentWorkspacePage() {
                 {incident.id}
               </span>
               <SeverityBadge severity={incident.severity} />
-              <span className="text-xs text-foreground bg-muted px-2.5 py-1 rounded-lg border border-border">
+              <span className="text-xs text-foreground bg-muted px-2.5 py-1 rounded-lg border border-border font-mono">
                 {incident.service}
               </span>
-              <span className="text-xs text-muted-foreground bg-background px-2.5 py-1 rounded-lg border border-border">
+              <span className="text-xs text-muted-foreground bg-background px-2.5 py-1 rounded-lg border border-border font-mono">
                 {incident.environment}
               </span>
             </div>
@@ -138,10 +138,10 @@ export default function IncidentWorkspacePage() {
           <div className="flex items-center gap-2 self-start lg:self-auto">
             {incident.status === "APPROVAL_REQUIRED" && (
               <Button
-                variant="amber"
+                variant="primary"
                 size="sm"
                 onClick={() => router.push("/approvals")}
-                className="text-xs gap-1.5 rounded-xl"
+                className="text-xs gap-1.5 rounded-xl font-mono"
               >
                 <ShieldCheck className="h-4 w-4" />
                 Review Safety Gate
@@ -167,12 +167,12 @@ export default function IncidentWorkspacePage() {
 
           <div>
             <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Detected At</span>
-            <span className="text-foreground block mt-0.5 font-medium">{formatDate(incident.created_at)}</span>
+            <span className="text-foreground block mt-0.5 font-medium font-mono">{formatDate(incident.created_at)}</span>
           </div>
 
           <div>
             <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Confidence</span>
-            <span className="text-emerald-600 dark:text-emerald-400 block mt-0.5 font-medium">94% Confidence</span>
+            <span className="text-zinc-200 block mt-0.5 font-medium font-mono">94% Confidence</span>
           </div>
         </div>
       </div>
@@ -254,7 +254,7 @@ export default function IncidentWorkspacePage() {
                     <span className="text-xs font-mono font-medium uppercase text-zinc-300">
                       Hypothesis #1 (Primary)
                     </span>
-                    <span className="text-xs font-mono font-medium text-emerald-400 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
+                    <span className="text-xs font-mono font-medium text-zinc-200 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                       94% Confidence
                     </span>
                   </div>
@@ -268,7 +268,7 @@ export default function IncidentWorkspacePage() {
                   <p className="text-xs text-zinc-200 font-medium">
                     Execute Kubernetes deployment rollback to previous stable image tag <code>checkout-v2.13.9</code>.
                   </p>
-                  <span className="inline-block text-[11px] font-mono text-amber-400 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                  <span className="inline-block text-[11px] font-mono text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
                     Risk Level 3 (Rollback) — Requires SRE Approval
                   </span>
                 </div>
@@ -375,10 +375,10 @@ export default function IncidentWorkspacePage() {
             <CardContent>
               <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-amber-400">
+                  <span className="text-xs font-mono font-medium text-zinc-300">
                     APPR-8801-01 • Level 3 Rollback Request
                   </span>
-                  <span className="text-xs font-mono font-medium text-amber-400 bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
+                  <span className="text-xs font-mono font-medium text-white bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
                     PENDING APPROVAL
                   </span>
                 </div>
@@ -387,7 +387,7 @@ export default function IncidentWorkspacePage() {
                 </p>
                 <div className="pt-2">
                   <Button
-                    variant="amber"
+                    variant="primary"
                     size="sm"
                     onClick={() => router.push("/approvals")}
                     className="font-mono text-xs"

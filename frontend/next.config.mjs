@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
-    const backendHost = process.env.BACKEND_URL || "http://localhost:8000";
+    const backendHost =
+      process.env.BACKEND_URL ||
+      (process.env.NODE_ENV === "production" ? "http://backend:8000" : "http://localhost:8000");
     return [
       {
         source: "/api/v1/:path*",

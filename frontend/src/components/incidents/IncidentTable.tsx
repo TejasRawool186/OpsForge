@@ -107,7 +107,7 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
                   <TableCell className="font-mono text-xs font-semibold text-foreground">
                     <Link
                       href={`/incidents/${incident.id}`}
-                      className="hover:underline hover:text-purple-600 dark:hover:text-purple-300 flex items-center gap-1"
+                      className="hover:underline hover:text-white flex items-center gap-1"
                     >
                       {incident.id}
                     </Link>
@@ -116,7 +116,7 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
                     <div className="flex flex-col max-w-md">
                       <Link
                         href={`/incidents/${incident.id}`}
-                        className="font-medium text-foreground hover:text-purple-600 dark:hover:text-purple-300 transition-colors line-clamp-1 text-xs sm:text-sm"
+                        className="font-medium text-foreground hover:text-white transition-colors line-clamp-1 text-xs sm:text-sm"
                       >
                         {incident.title}
                       </Link>
@@ -140,7 +140,7 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2 text-xs text-foreground">
-                      <div className="h-5 w-5 rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-[10px]">
+                      <div className="h-5 w-5 rounded-full bg-zinc-800 text-zinc-200 border border-zinc-700 flex items-center justify-center font-bold text-[10px]">
                         {(incident.assigned_subagent || "A").charAt(0).toUpperCase()}
                       </div>
                       <span className="truncate">{incident.assigned_subagent || "Supervisor"}</span>

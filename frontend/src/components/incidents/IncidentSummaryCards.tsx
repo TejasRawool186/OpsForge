@@ -32,31 +32,31 @@ export const IncidentSummaryCards: React.FC<IncidentSummaryCardsProps> = ({
     {
       title: "Total Issues",
       value: totalCount,
-      stripeColor: "border-l-[#3b82f6]",
+      stripeColor: "border-l-zinc-500",
       icon: BarChart2,
     },
     {
       title: "Open",
       value: openCount,
-      stripeColor: "border-l-[#f3f4f6]",
+      stripeColor: "border-l-white",
       icon: Disc,
     },
     {
       title: "Testing",
       value: testingCount,
-      stripeColor: "border-l-[#eab308]",
+      stripeColor: "border-l-zinc-400",
       icon: FlaskConical,
     },
     {
       title: "Resolved",
       value: resolvedCount,
-      stripeColor: "border-l-[#10b981]",
+      stripeColor: "border-l-zinc-600",
       icon: Check,
     },
     {
       title: "Overdue",
       value: overdueCount,
-      stripeColor: "border-l-[#ef4444]",
+      stripeColor: "border-l-zinc-200",
       icon: AlertTriangle,
     },
   ];

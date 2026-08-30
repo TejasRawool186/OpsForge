@@ -12,6 +12,12 @@ class ToolResponse(BaseModel):
     status: str
     capabilities: List[str] = []
     last_check: datetime
+    latency_ms: Optional[int] = None
+    requires_approval: Optional[bool] = False
+    tool_type: Optional[str] = "MCP Tool"
+    description: Optional[str] = None
+    mcp_server: Optional[str] = None
+
 
 
 class ToolListResponse(BaseModel):

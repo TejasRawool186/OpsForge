@@ -48,6 +48,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Activity,
     },
     {
+      name: "Setup Wizard",
+      href: "/onboarding",
+      icon: Settings,
+    },
+    {
       name: "System Settings",
       href: "/settings",
       icon: Settings,
@@ -114,9 +119,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {item.count !== undefined && item.count > 0 && (
                 <span
                   className={cn(
-                    "px-2 py-0.5 rounded-full text-xs font-semibold",
+                    "px-2 py-0.5 rounded-full text-xs font-semibold font-mono",
                     isActive
-                      ? "bg-purple-500/30 text-purple-200"
+                      ? "bg-white text-zinc-950 font-bold"
                       : "bg-muted text-muted-foreground"
                   )}
                 >

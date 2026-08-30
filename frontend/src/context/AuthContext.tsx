@@ -24,9 +24,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const getApiBase = () => {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
+  if (envUrl.startsWith("/")) return envUrl.replace(/\/$/, "");
   const cleanBase = envUrl.replace(/\/$/, "").replace(/\/api\/v1$/, "");
-  return `${cleanBase}/api/v1`;
+  return cleanBase ? `${cleanBase}/api/v1` : "/api/v1";
 };
 
 const API_BASE = getApiBase();

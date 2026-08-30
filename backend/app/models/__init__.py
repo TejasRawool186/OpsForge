@@ -10,6 +10,8 @@ from app.models.tool import ToolRegistry
 from app.models.remediation import RemediationLog
 from app.models.user_integration import UserIntegration
 from app.models.user import User
+from app.models.workspace import Workspace, WorkspaceMember, OnboardingStatus
+from app.models.github_connection import GitHubConnection, GitHubRepository
 
 __all__ = [
     "Base",
@@ -23,4 +25,9 @@ __all__ = [
     "RemediationLog",
     "UserIntegration",
     "User",
+    "Workspace",
+    "WorkspaceMember",
+    "OnboardingStatus",
+    "GitHubConnection",
+    "GitHubRepository",
 ]

@@ -30,8 +30,16 @@ async def list_tools(db: AsyncSession = Depends(get_db)):
     tools = await svc.get_all_tools()
     tool_list = [
         ToolResponse(
-            name=t.name, display_name=t.display_name, status=t.status,
-            capabilities=_parse_capabilities(t), last_check=t.last_check,
+            name=t.name,
+            display_name=t.display_name,
+            status=t.status,
+            capabilities=_parse_capabilities(t),
+            last_check=t.last_check,
+            latency_ms=getattr(t, "latency_ms", 15),
+            requires_approval=getattr(t, "requires_approval", False),
+            tool_type=getattr(t, "tool_type", "MCP Tool"),
+            description=getattr(t, "description", None),
+            mcp_server=getattr(t, "mcp_server", t.name),
         )
         for t in tools
     ]

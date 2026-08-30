@@ -87,6 +87,27 @@ export default function IncidentsPage() {
     return items.slice(0, 5);
   }, [incidents, approvals, user]);
 
+  const [isSimulating, setIsSimulating] = React.useState(false);
+
+  const handleSimulateIncident = async () => {
+    setIsSimulating(true);
+    try {
+      const sampleTitles = [
+        { title: "Checkout Service Connection Pool Exhaustion", service: "checkout-service", severity: "CRITICAL" },
+        { title: "Auth Service JWT Rotation Cache Staleness", service: "auth-service", severity: "HIGH" },
+        { title: "Payment Gateway HTTP 500 Spike", service: "payment-gateway", severity: "HIGH" },
+        { title: "Order Consumer Queue Lag Exceeded Threshold", service: "order-service", severity: "MEDIUM" },
+      ];
+      const sample = sampleTitles[Math.floor(Math.random() * sampleTitles.length)];
+      await api.triggerIncident(sample.title, sample.service, sample.severity);
+      await fetchData();
+    } catch (err) {
+      console.error("Failed to simulate incident:", err);
+    } finally {
+      setIsSimulating(false);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Page Title Header */}
@@ -99,14 +120,24 @@ export default function IncidentsPage() {
             Overview of all live projects and SRE telemetry issues
           </p>
         </div>
-        <button
-          onClick={fetchData}
-          disabled={isLoading}
-          className="px-3 py-1.5 rounded-xl bg-[#141417] border border-[#23232a] text-xs font-medium text-[#8e8e99] hover:text-white flex items-center gap-2 transition-colors disabled:opacity-50"
-        >
-          <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
-          Refresh Live Data
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSimulateIncident}
+            disabled={isSimulating}
+            className="px-3 py-1.5 rounded-xl bg-white text-black text-xs font-mono font-bold hover:bg-zinc-200 flex items-center gap-1.5 transition-colors disabled:opacity-50"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            {isSimulating ? "Creating..." : "Simulate Incident Alert"}
+          </button>
+          <button
+            onClick={fetchData}
+            disabled={isLoading}
+            className="px-3 py-1.5 rounded-xl bg-[#141417] border border-[#23232a] text-xs font-medium text-[#8e8e99] hover:text-white flex items-center gap-2 transition-colors disabled:opacity-50"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
+            Refresh Live Data
+          </button>
+        </div>
       </div>
 
       {/* 5 KPI Metric Cards & Stats Ribbon */}
@@ -130,62 +161,62 @@ export default function IncidentsPage() {
             <div className="space-y-4">
               {/* Critical */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-red-500" />
+                <div className="flex items-center gap-2 w-20 text-foreground font-mono">
+                  <span className="h-2 w-2 rounded-full bg-white" />
                   <span>Critical</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-red-500 rounded-full transition-all"
+                    className="h-full bg-white rounded-full transition-all"
                     style={{ width: incidents.length > 0 ? `${(criticalCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
-                <span className="w-5 text-right text-foreground font-bold">{criticalCount}</span>
+                <span className="w-5 text-right text-foreground font-bold font-mono">{criticalCount}</span>
               </div>
 
               {/* High */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-orange-500" />
+                <div className="flex items-center gap-2 w-20 text-foreground font-mono">
+                  <span className="h-2 w-2 rounded-full bg-zinc-300" />
                   <span>High</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-orange-500 rounded-full transition-all"
+                    className="h-full bg-zinc-300 rounded-full transition-all"
                     style={{ width: incidents.length > 0 ? `${(highCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
-                <span className="w-5 text-right text-foreground font-bold">{highCount}</span>
+                <span className="w-5 text-right text-foreground font-bold font-mono">{highCount}</span>
               </div>
 
               {/* Medium */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-yellow-500" />
+                <div className="flex items-center gap-2 w-20 text-foreground font-mono">
+                  <span className="h-2 w-2 rounded-full bg-zinc-500" />
                   <span>Medium</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-yellow-500 rounded-full transition-all"
+                    className="h-full bg-zinc-500 rounded-full transition-all"
                     style={{ width: incidents.length > 0 ? `${(mediumCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
-                <span className="w-5 text-right text-foreground font-bold">{mediumCount}</span>
+                <span className="w-5 text-right text-foreground font-bold font-mono">{mediumCount}</span>
               </div>
 
               {/* Low */}
               <div className="flex items-center justify-between gap-4 text-xs font-medium">
-                <div className="flex items-center gap-2 w-20 text-foreground">
-                  <span className="h-2 w-2 rounded-full bg-blue-500" />
+                <div className="flex items-center gap-2 w-20 text-foreground font-mono">
+                  <span className="h-2 w-2 rounded-full bg-zinc-700" />
                   <span>Low</span>
                 </div>
                 <div className="flex-1 h-2 bg-[var(--track-bg)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 rounded-full transition-all"
+                    className="h-full bg-zinc-700 rounded-full transition-all"
                     style={{ width: incidents.length > 0 ? `${(lowCount / totalCount) * 100}%` : "0%" }}
                   />
                 </div>
-                <span className="w-5 text-right text-foreground font-bold">{lowCount}</span>
+                <span className="w-5 text-right text-foreground font-bold font-mono">{lowCount}</span>
               </div>
             </div>
           </div>
@@ -218,7 +249,7 @@ export default function IncidentsPage() {
                   return (
                     <div key={act.id} className="py-3 flex items-center justify-between gap-3 text-xs">
                       <div className="flex items-start gap-3">
-                        <div className="p-1 text-indigo-400 mt-0.5 bg-indigo-500/10 rounded-lg">
+                        <div className="p-1 text-zinc-200 mt-0.5 bg-zinc-800 border border-zinc-700 rounded-lg">
                           <Icon className="h-4 w-4" />
                         </div>
                         <div>

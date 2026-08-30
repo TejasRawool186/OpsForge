@@ -79,7 +79,7 @@ export default function ApprovalsPage() {
       {/* Pending Safety Requests */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-medium uppercase text-zinc-300 flex items-center gap-2 tracking-wider">
-          <AlertTriangle className="h-4 w-4 text-amber-400" />
+          <AlertTriangle className="h-4 w-4 text-zinc-300" />
           Pending Approvals ({pendingList.length})
         </h2>
 
@@ -102,7 +102,7 @@ export default function ApprovalsPage() {
                       Incident: {app.incident_id}
                     </span>
                   </div>
-                  <span className="text-xs font-mono text-amber-400">
+                  <span className="text-xs font-mono text-zinc-400">
                     Requested: {formatDate(app.requested_at)}
                   </span>
                 </div>
@@ -129,7 +129,7 @@ export default function ApprovalsPage() {
 
                 <div className="flex items-center justify-end gap-3 pt-2">
                   <Button
-                    variant="destructive"
+                    variant="outline"
                     size="sm"
                     onClick={() => handleOpenDecision(app, "REJECTED")}
                     className="font-mono text-xs gap-1.5"
@@ -138,7 +138,7 @@ export default function ApprovalsPage() {
                     Reject Action
                   </Button>
                   <Button
-                    variant="amber"
+                    variant="primary"
                     size="sm"
                     onClick={() => handleOpenDecision(app, "APPROVED")}
                     className="font-mono text-xs gap-1.5"
@@ -226,7 +226,7 @@ export default function ApprovalsPage() {
               </Button>
               <Button
                 type="button"
-                variant={actionType === "APPROVED" ? "amber" : "destructive"}
+                variant={actionType === "APPROVED" ? "primary" : "outline"}
                 onClick={handleConfirmDecision}
                 isLoading={isSubmitting}
                 className="font-mono text-xs"
